@@ -1,0 +1,36 @@
+title: '🎨 BASH Style Guide (my 2¢)'
+
+description: >- # this means to ignore newlines until "baseurl:"
+  This is the description
+
+baseurl: '' # the subpath of your site, e.g. /blog
+url: 'https://styles.sh' # the base hostname & protocol for your site, e.g. http://example.com
+
+email: xxx@example.org
+twitter_username: xxx
+github_username: xxx
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-include-cache
+
+include: ['_pages']
+
+remote_theme: 'mmistakes/minimal-mistakes@4.22.0'
+minimal_mistakes_skin: air
+
+atom_feed:
+  hide: true
+# Exclude from processing.
+# The following items will not be processed, by default. Create a custom list
+# to override the default setting.
+# exclude:
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
