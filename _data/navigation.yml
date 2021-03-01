@@ -38,6 +38,8 @@ styles:
         url: '#'
       - title: '<code>${var/foo/bar}</code>'
         url: '#'
+      - title: '<code>[[ "$1" = *"foo"* ]]</code>'
+        url: '#'
 
   - title: '🗃️ Arrays'
     url: '#arrays'
@@ -54,13 +56,21 @@ styles:
         url: '#'
       - title: '<code>return</code>'
         url: '#'
-      - title: '<code>--out</code>'
+      - title: '<code>$OUT</code>'
         url: '#'
 
   - title: '💻 Commands'
     url: '#commands'
     children:
+      - title: '<code>main()</code>'
+        url: '#'
+      - title: '<code>$*</code> or <code>$@</code>'
+        url: '#'
+      - title: '<code>[ while "$#" -gt 0 ]</code>'
+        url: '#'
       - title: '<code>case ... esac</code>'
+        url: '#'
+      - title: '<code>- <<< "Foo"</code>'
         url: '#'
 
   - title: '🐚 Subshells'
@@ -73,6 +83,14 @@ styles:
       - title: '<code>$?</code>'
         url: '#'
       - title: '<code>STDOUT</code> & <code>STDERR</code>'
+        url: '#'
+
+  - title: '📐 Math'
+    url: '#math'
+    children:
+      - title: '<code>$(( i + 1 ))</code>'
+        url: '#'
+      - title: '<code>bc -l</code>'
         url: '#'
 
   - title: '🐶 Representing Objects'

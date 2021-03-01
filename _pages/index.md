@@ -32,6 +32,10 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ### `__myApp__privateVar`
 
+### `(set -o posix; set)`
+
+### `typeset -n`
+
 ## 💬 Strings
 
 ### `cmd` or `"value"`
@@ -39,6 +43,8 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 ### `grep` & `sed`
 
 ### `${var/foo/bar}`
+
+### `[[ "$1" = *"foo"* ]]`
 
 ## 🗃️ Arrays
 
@@ -52,7 +58,35 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ### `return`
 
-### `# My Function`
+### `$OUT`
+
+## 💻 Commands
+
+### `main()`
+
+### `$*` or `$@`
+
+### `[ while "$#" -gt 0 ]`
+
+### `case ... esac`
+
+### `- <<< "Foo"`
+
+## 🐚 Subshells
+
+### `$(cat myFile.txt)`
+
+### `$(<myFile.txt)`
+
+### `$?`
+
+### `STDOUT & STDERR`
+
+## 📐 Math
+
+### `$(( i + 1 ))`
+
+### `bc -l`
 
 ## 🐶 Representing Objects
 
@@ -62,10 +96,16 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ### `^&,;+&|+`
 
-## 🖼️ Interesting Patterns
-
-### `--out`
+## 📦 Defining Blocks
 
 ### `do ... end`
+
+## 🔬 Testing
+
+### `it.needs_tests()`
+
+## 📖 Documentation
+
+### `## # My Function`
 
 ### `>> "$apiDocs.md"`
