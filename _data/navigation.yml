@@ -68,8 +68,6 @@ styles:
         url: '#'
       - title: '<code>- <<< "Foo"</code>'
         url: '#'
-      - title: '<code>cmd { ... }</code>'
-        url: '#'
 
   - title: '🐚 Subshells'
     url: '#subshells'
@@ -104,6 +102,8 @@ styles:
   - title: '📦 Defining Blocks'
     url: '#defining-blocks'
     children:
+      - title: '<code>cmd { ... }</code>'
+        url: '#'
       - title: '<code>do ... end</code>'
         url: '#'
 

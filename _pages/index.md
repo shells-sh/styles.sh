@@ -395,8 +395,6 @@ If you need to view the source code of a function: `declare -f functionName`
 
 ## `- <<< "Foo"`
 
-## `cmd { ... }`
-
 <br>
  🐚 Subshells
 
@@ -426,6 +424,8 @@ If you need to view the source code of a function: `declare -f functionName`
 
 <br>
 # 📦 Defining Blocks
+
+## `cmd { ... }`
 
 ## `do ... end`
 
