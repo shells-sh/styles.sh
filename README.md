@@ -347,6 +347,7 @@ var="${var%% *}"
 ### `shopt -s extglob`
 
 <br>
+
 # 🗃️ Arrays
 
 ## `declare -a`
@@ -375,6 +376,7 @@ I have nothing to say about BASH Associative Arrays 🤷‍♀️
 I almost never use them because I try to natively support BASH `3.2.57`.
 
 <br>
+
 # 🏃‍♀️ Functions
 
 ## `local`
@@ -445,6 +447,7 @@ If you need to view the source code of a function: `declare -f functionName`
 `TODO`
 
 <br>
+
 # 💻 Commands
 
 ## `main()`
@@ -460,7 +463,8 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `- <<< "Foo"`
 
 <br>
- 🐚 Subshells
+
+# 🐚 Subshells
 
 ## `$(cat myFile.txt)`
 
@@ -471,6 +475,7 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `STDOUT & STDERR`
 
 <br>
+
 # 📐 Math
 
 ## `$(( i + 1 ))`
@@ -478,6 +483,7 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `bc -l`
 
 <br>
+
 # 🐶 Representing Objects
 
 ## `name:1;age:2;`
@@ -487,6 +493,7 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `^&,;+&|+`
 
 <br>
+
 # 📦 Defining Blocks
 
 ## `cmd { ... }`
@@ -494,11 +501,13 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `do ... end`
 
 <br>
+
 # 🔬 Testing
 
 ## `it.needs_tests()`
 
 <br>
+
 # 📖 Documentation
 
 ## `## # My Function`
@@ -506,6 +515,7 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `>> "$apiDocs.md"`
 
 <br>
+
 # 🍏 Mac support
 
 💡 **Recommendation:** Support Mac out-of-the-box, do not use newer BASH features.
