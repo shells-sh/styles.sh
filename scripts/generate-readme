@@ -2,7 +2,7 @@
 
 require "yaml"
 
-toc = ""
+toc = "View the full style guide at https://styles.sh\n\n---\n\n"
 
 YAML.load_file("_data/navigation.yml")["styles"].each do |nav_item|
   toc << " - [#{nav_item["title"]}](#{nav_item["url"]})\n"

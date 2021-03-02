@@ -19,6 +19,10 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ---
 
+View the full style guide at https://styles.sh
+
+---
+
  - [my 2¢](#page-title)
    - [» Style Guide](#page-title)
  - [⌨️ Variables](#%EF%B8%8F-variables)
