@@ -9,25 +9,17 @@ styles:
       - title: '» Style Guide'
         url: '#'
 
-  - title: '🍏 Mac support'
-    url: '#'
-    children:
-      - title: '<code>3.2.57(1)-release</code>'
-        url: '#'
-      - title: '<code>eval</code>'
-        url: '#'
-
   - title: '⌨️ Variables'
     url: '#variables'
     children:
-      - title: '<code>PUBLIC_VARIABLE</code>'
-        url: '#'
+      - title: '<code>MYAPP_PUBLIC_VARIABLE</code>'
+        url: '#MYAPP-PUBLIC-VARIABLE'
       - title: '<code>__myApp__privateVar</code>'
-        url: '#'
+        url: '#__myApp__privateVar'
       - title: '<code>(set -o posix; set)</code>'
-        url: '#'
+        url: '#set--o-posix-set'
       - title: '<code>typeset -n</code>'
-        url: '#'
+        url: '#typeset--n'
 
   - title: '💬 Strings'
     url: '#strings'
@@ -122,3 +114,17 @@ styles:
         url: '#'
       - title: '<code>>> "$apiDocs.md"</code>'
         url: '#'
+
+  - title: '🍏 Mac support'
+    url: '#-mac-support'
+    children:
+      - title: '<code>3.2.57(1)-release</code>'
+        url: '#32571-release'
+      - title: '<code>zsh</code>'
+        url: '#zsh'
+      - title: '<code>BASH 4</code> + <code>BASH 5</code>'
+        url: '#bash-4--bash-5'
+      - title: '<code>$variableName</code>'
+        url: '#variableName'
+      - title: '<code>Docker</code>'
+        url: '#docker'

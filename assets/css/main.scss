@@ -32,6 +32,10 @@ html {
     width: auto;
   }
 
+  section.page__content blockquote p {
+    font-style: normal;
+  }
+
   font-size: 16px; // change to whatever
 
   @include breakpoint($small) {
