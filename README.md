@@ -32,7 +32,7 @@ View the full style guide at https://styles.sh
  - [💬 Strings](#-strings)
    - [<code>cmd</code> or <code>"value"</code>](#cmd-or-value)
    - [<code>grep</code> & <code>sed</code> & <code>awk</code>](#grep--sed--awk)
-   - [<code>${cheat%%\*sheet}</code>](#)
+   - [<code>${cheat%%\*sheet}</code>](#cheatsheet)
    - [<code>shopt -s extglob</code>](#shopt--s-extglob)
  - [🗃️ Arrays](#%EF%B8%8F-arrays)
    - [<code>declare -a</code>](#declare--a)
@@ -40,37 +40,37 @@ View the full style guide at https://styles.sh
    - [<code>find -print0</code>](#find-print0)
    - [<code>declare -A</code>](#declare--a-1)
  - [🏃‍♀️ Functions](#%EF%B8%8F-functions)
-   - [<code>local</code>](#)
-   - [<code>return</code>](#)
-   - [<code>declare -f</code>](#)
-   - [<code>$OUT</code> <code>--out</code>](#)
+   - [<code>local</code>](#local)
+   - [<code>return</code>](#return)
+   - [<code>declare -f</code>](#declare--f)
+   - [<code>$OUT</code> <code>--out</code>](#out--out)
  - [💻 Commands](#-commands)
-   - [<code>main()</code>](#)
-   - [<code>$*</code> or <code>$@</code>](#)
-   - [<code>${1:-default}</code>](#)
-   - [<code>[ while "$#" -gt 0 ]</code>](#)
-   - [<code>case ... esac</code>](#)
-   - [<code>- <<< "Foo"</code>](#)
+   - [<code>main()</code>](#main)
+   - [<code>$*</code> or <code>$@</code>](#-or-)
+   - [<code>${1:-default}</code>](#1-default)
+   - [<code>[ while "$#" -gt 0 ]</code>](#-while---gt-0-)
+   - [<code>case ... esac</code>](#case--esac)
+   - [<code>- <<< "Foo"</code>](#---foo)
  - [🐚 Subshells](#-subshells)
-   - [<code>$(cat myFile.txt)</code>](#)
-   - [<code>$(&lt;myFile.txt)</code>](#)
-   - [<code>$?</code>](#)
-   - [<code>STDOUT</code> & <code>STDERR</code>](#)
+   - [<code>$(cat myFile.txt)</code>](#cat-myfiletxt)
+   - [<code>$(&lt;myFile.txt)</code>](#myfiletxt)
+   - [<code>$?</code>](#code)
+   - [<code>STDOUT</code> & <code>STDERR</code>](#stdout--stderr)
  - [📐 Math](#-math)
-   - [<code>$(( i + 1 ))</code>](#)
-   - [<code>bc -l</code>](#)
+   - [<code>$(( i + 1 ))</code>](#-i--1-)
+   - [<code>bc -l</code>](#bc--l)
  - [🐶 Representing Objects](#-representing-objects)
-   - [<code>name:1;age:2;</code>](#)
-   - [<code>/dev/urandom</code>](#)
-   - [<code>^&,;+&|+</code>](#)
+   - [<code>name:1;age:2;</code>](#name1age2)
+   - [<code>/dev/urandom</code>](#devurandom)
+   - [<code>^&,;+&|+</code>](#-characters)
  - [📦 Defining Blocks](#-defining-blocks)
-   - [<code>cmd { ... }</code>](#)
-   - [<code>do ... end</code>](#)
+   - [<code>cmd { ... }</code>](#cmd---)
+   - [<code>do ... end</code>](#do--end)
  - [🔬 Testing](#-testing)
-   - [<code>it.needs_tests()</code>](#)
- - [📖 Documentation](#documentation)
-   - [<code>## # My Function</code>](#)
-   - [<code>>> "$apiDocs.md"</code>](#)
+   - [<code>it.needs_tests()</code>](#itneeds_tests)
+ - [📖 Documentation](#-documentation)
+   - [<code>## # My Function</code>](#--my-function)
+   - [<code>>> "$apiDocs.md"</code>](#-apidocsmd)
  - [🍏 Mac support](#-mac-support)
    - [<code>3.2.57(1)-release</code>](#32571-release)
    - [<code>zsh</code>](#zsh)
@@ -529,7 +529,7 @@ If you need to view the source code of a function: `declare -f functionName`
 
 ## `$(<myFile.txt)`
 
-## `$?`
+## `$? code`
 
 ## `STDOUT & STDERR`
 
@@ -549,7 +549,7 @@ If you need to view the source code of a function: `declare -f functionName`
 
 ## `/dev/urandom`
 
-## `^&,;+&|+`
+## `^&,;+&|+ characters`
 
 <br>
 

@@ -477,7 +477,7 @@ If you need to view the source code of a function: `declare -f functionName`
 
 ## `$(<myFile.txt)`
 
-## `$?`
+## `$? code`
 
 ## `STDOUT & STDERR`
 
@@ -497,7 +497,7 @@ If you need to view the source code of a function: `declare -f functionName`
 
 ## `/dev/urandom`
 
-## `^&,;+&|+`
+## `^&,;+&|+ characters`
 
 <br>
 
