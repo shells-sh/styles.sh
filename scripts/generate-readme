@@ -5,6 +5,7 @@ require "yaml"
 toc = "View the full style guide at https://styles.sh\n\n---\n\n"
 
 YAML.load_file("_data/navigation.yml")["styles"].each do |nav_item|
+  next if nav_item["title"] == "my 2¢"
   toc << " - [#{nav_item["title"]}](#{nav_item["url"]})\n"
   nav_item["children"].each do |item_child|
     toc << "   - [#{item_child["title"]}](#{item_child["url"]})\n"

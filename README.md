@@ -23,8 +23,6 @@ View the full style guide at https://styles.sh
 
 ---
 
- - [my 2¢](#page-title)
-   - [» Style Guide](#page-title)
  - [⌨️ Variables](#%EF%B8%8F-variables)
    - [<code>MYAPP_PUBLIC_VARIABLE</code>](#myapp_public_variable)
    - [<code>_myApp_privateVar</code>](#_myapp_privatevar)
