@@ -1,3 +1,5 @@
+> `NOTE` - This is out-of-date, need to write a script to keep it up-to-date, see https://styles.sh
+
 # 🖌️ BASH Style Guide
 
 - Some programming styles are **personal preferences**.
