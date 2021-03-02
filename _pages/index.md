@@ -286,8 +286,6 @@ var="${var%% *}"
 > Keep in mind the performance requirements for your program and choose
 > what is right for you.
 
-## `${var/foo/bar}`
-
 <br>
 # 🗃️ Arrays
 
@@ -310,7 +308,7 @@ For recommendations on storing complex data, see [Representing Objects](#-repres
 
 ## `declare -A`
 
-I have nothing to say about BASH Associative Arrays.
+I have nothing to say about BASH Associative Arrays 🤷‍♀️
 
 I almost never use them because I try to natively support BASH `3.2.57`.
 
@@ -319,11 +317,70 @@ I almost never use them because I try to natively support BASH `3.2.57`.
 
 ## `local`
 
+It is so super critical that every variable you assign in a function be `local`.
+
+#### Example
+
+```sh
+myFunction() {
+  local varOne # <-- ✅ ALWAYS define variables as local
+  varTwo=2     # <-- ❌ NEVER set globals unless you intend to
+  declare -a varThree=() # declare defines vars as 'local' by default
+}
+```
+
+> ℹ️ When perfoming `for` loops, the variable name will become assigned.
+> This will be global unless you define it as `local` before your `for` loop.
+>
+> ```sh
+> myFunction() {
+>   local arg # <-- define your 'for' loop variables as local
+>   for arg in "$@"
+>   do
+>     : # do something
+>   done
+> }
+>
+> myFunction "hello" "world"
+> echo "$arg"
+> # => "" # <-- if you don't use `local arg`, this will be "world"
+> ```
+
 ## `return`
+
+BASH uses implicit returns, meaning the return code will be the `$?` return code of the last command run in your function - unless you explicitly `return`.
+
+Recommend you check for error cases, e.g. wrong number of arguments or invalid arguments, and explicitly `return 1`.
+
+Do not explicitly `return 0` unless you are sure the previous commands did not fail (_or if you do not care_).
+
+#### Example
+
+```sh
+## # `myFunction`
+##
+## |      | Parameters |
+## |------|------------|
+## | `$1` | The one and only argument this function expects |
+##
+myFunction() {
+  [ $# -ne 0 ] && { echo "Wrong number of arguments" >&2; return 1; }
+  # do things
+}
+```
+
+> 💡 **Tip:** Always write tests for the return values of your functions.
 
 ## `declare -f`
 
+If you need to view the source code of a function: `declare -f functionName`
+
+> 💡 **Tip:** If you need to copy a function, you can get the source code from `declare -f functionName`,
+> replace the name at the start of the source code, and `eval` the source code.
+
 ## `$OUT` `--out`
+
+`TODO`
 
 <br>
 # 💻 Commands
@@ -337,6 +394,8 @@ I almost never use them because I try to natively support BASH `3.2.57`.
 ## `case ... esac`
 
 ## `- <<< "Foo"`
+
+## `cmd { ... }`
 
 <br>
  🐚 Subshells
