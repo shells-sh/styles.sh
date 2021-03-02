@@ -55,10 +55,10 @@ html {
   }
 
   div#main nav.nav__list ul.nav__items {
-    font-size: 20px; // change to whatever
+    font-size: 24px; // change to whatever
 
     @include breakpoint($small) {
-      font-size: 20px; // change to whatever
+      font-size: 24px; // change to whatever
     }
 
     @include breakpoint($medium) {
