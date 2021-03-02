@@ -30,13 +30,17 @@ styles:
         url: '#cmd-or-value'
       - title: '<code>grep</code> & <code>sed</code> & <code>awk</code>'
         url: '#grep--sed--awk'
+      - title: '<code>${cheat%%\*sheet}</code>'
+        url: '#'
+      - title: '<code>shopt -s extglob</code>'
+        url: '#shopt--s-extglob'
 
   - title: '🗃️ Arrays'
     url: '#arrays'
     children:
       - title: '<code>declare -a</code>'
         url: '#declare--a'
-      - title: '<code>IFS=:</code>'
+      - title: "<code>IFS=$'\\n'</code>"
         url: '#ifs'
       - title: '<code>find -print0</code>'
         url: '#find-print0'

@@ -1,10 +1,4 @@
----
-title: '🖌️ BASH Style Guide'
-permalink: /
-layout: single
-sidebar:
-  nav: 'styles'
----
+# 🖌️ BASH Style Guide
 
 - Some programming styles are **personal preferences**.
 - Some programming styles are **company guidelines**.
