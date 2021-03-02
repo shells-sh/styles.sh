@@ -154,7 +154,7 @@ echo "$hello"
 
 ## `(set -o posix; set)`
 
-This is the corrent way to get a definition of a variable:
+This is the correct way to get a definition of a variable:
 
 ```sh
 foo=5
