@@ -292,6 +292,43 @@ var="${var%% *}"
 
 [Here](https://tldp.org/LDP/abs/html/string-manipulation.html) is a useful reference for Bash string manipulation.
 
+It's really easy once you get the hang it it!
+
+Just remember:
+
+- `#` is the left
+- `%` is the right
+
+#### Substring Removal
+
+> It is _very_ common to want to remove a _part_ of a string:
+
+|      | Description                            | e.g. `.foo Hello .foo World .foo`       |
+| ---- | -------------------------------------- | --------------------------------------- |
+| `/`  | Remove first match                     | `${x/foo}` ➤ `. Hello .foo World .foo`  |
+| `//` | Remove all matches                     | `${x//foo}` ➤ `. Hello . World .`       |
+| `#`  | Remove shortest match (from the left)  | `${x#*.f}` ➤ `oo Hello .foo World .foo` |
+| `##` | Remove longest match (from the left)   | `${x##*.f}` ➤ `oo`                      |
+| `%`  | Remove shortest match (from the right) | `${x%oo*}` ➤ `.foo Hello .foo World .f` |
+| `%%` | Remove longest match (from the right)  | `${x%%oo*}` ➤ `.f`                      |
+
+> 💡 **Tip:** When using `#` and `%` you'll usually want to accompany it with `*` (see examples)
+
+#### Substring Replacement
+
+|       | Description | e.g. |
+| ----- | ----------- | ---- |
+| `/`   |             |
+| `//`  |             |
+| `/#`  |             |
+| `//#` |             |
+| `/%`  |             |
+| `//%` |             |
+| `:`   |             |
+| `: :` |             |
+
+> 💡 **Related:** To get the length of a string: `${#varname}`
+
 ### `shopt -s extglob`
 
 <br>
