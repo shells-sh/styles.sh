@@ -290,6 +290,8 @@ var="${var%% *}"
 
 ### `${cheat%%\*sheet}`
 
+[Here](https://tldp.org/LDP/abs/html/string-manipulation.html) is a useful reference for BASH string manipulation.
+
 ### `shopt -s extglob`
 
 <br>
@@ -314,6 +316,65 @@ To declare a new array, use `declare -a` ([see example](#declare-dynamic-name-ar
 For recommendations on storing complex data, see [Representing Objects](#-representing-objects) below.
 
 ## `IFS=$'\n'`
+
+To load an array with items separated by newlines:
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+# Run 'ls' and put each result into ar array
+IFS=$'\n' read -d '' -ra items < <(ls)
+
+# Read each line of a file into an array
+IFS=$'\n' read -d '' -ra items < myFile
+```
+
+Alternatively, you may want a string separated by a character such as `:`
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+# :-delimited string
+textItems="foo:hello world:bar"
+
+# Read the items into an array
+IFS=: read -d '' -ra items < <(printf "$textItems")
+
+echo "${#items[@]}"
+# => 3
+
+echo "${items[*]}"
+# => "foo hello world bar"
+
+# Or read a literal string in directly
+IFS=: read -d '' -ra items <<< <(printf "foo:hello world:bar")
+
+# ☝️ Gotcha: if you do this, there will be a trailing newline in the 'bar\n' item
+IFS=: read -d '' -ra items <<< "foo:hello world:bar"
+```
+
+## `find -print0`
+
+Related to `IFS`, to load an array with items from the `find` command:
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+local filePath
+while IFS= read -rd '' filePath
+do
+  items+=("$filePath")
+done < <(find . -name "*.sh" -print0)
+```
 
 ## `declare -A`
 

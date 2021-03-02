@@ -31,44 +31,44 @@ View the full style guide at https://styles.sh
    - [<code>declare</code>](#declare)
    - [<code>typeset -n</code>](#typeset--n)
    - [<code>(set -o posix; set)</code>](#set--o-posix-set)
- - [💬 Strings](#strings)
+ - [💬 Strings](#-strings)
    - [<code>cmd</code> or <code>"value"</code>](#cmd-or-value)
    - [<code>grep</code> & <code>sed</code> & <code>awk</code>](#grep--sed--awk)
    - [<code>${cheat%%\*sheet}</code>](#)
    - [<code>shopt -s extglob</code>](#shopt--s-extglob)
- - [🗃️ Arrays](#arrays)
+ - [🗃️ Arrays](#-arrays)
    - [<code>declare -a</code>](#declare--a)
    - [<code>IFS=$'\n'</code>](#ifs)
    - [<code>find -print0</code>](#find-print0)
    - [<code>declare -A</code>](#declare--a-1)
- - [🏃‍♀️ Functions](#functions)
+ - [🏃‍♀️ Functions](#-functions)
    - [<code>local</code>](#)
    - [<code>return</code>](#)
    - [<code>declare -f</code>](#)
    - [<code>$OUT</code> <code>--out</code>](#)
- - [💻 Commands](#commands)
+ - [💻 Commands](#-commands)
    - [<code>main()</code>](#)
    - [<code>$*</code> or <code>$@</code>](#)
    - [<code>${1:-default}</code>](#)
    - [<code>[ while "$#" -gt 0 ]</code>](#)
    - [<code>case ... esac</code>](#)
    - [<code>- <<< "Foo"</code>](#)
- - [🐚 Subshells](#subshells)
+ - [🐚 Subshells](#-subshells)
    - [<code>$(cat myFile.txt)</code>](#)
    - [<code>$(&lt;myFile.txt)</code>](#)
    - [<code>$?</code>](#)
    - [<code>STDOUT</code> & <code>STDERR</code>](#)
- - [📐 Math](#math)
+ - [📐 Math](#-math)
    - [<code>$(( i + 1 ))</code>](#)
    - [<code>bc -l</code>](#)
- - [🐶 Representing Objects](#representing-objects)
+ - [🐶 Representing Objects](#-representing-objects)
    - [<code>name:1;age:2;</code>](#)
    - [<code>/dev/urandom</code>](#)
    - [<code>^&,;+&|+</code>](#)
- - [📦 Defining Blocks](#defining-blocks)
+ - [📦 Defining Blocks](#-defining-blocks)
    - [<code>cmd { ... }</code>](#)
    - [<code>do ... end</code>](#)
- - [🔬 Testing](#testing)
+ - [🔬 Testing](#-testing)
    - [<code>it.needs_tests()</code>](#)
  - [📖 Documentation](#documentation)
    - [<code>## # My Function</code>](#)
@@ -344,6 +344,8 @@ var="${var%% *}"
 
 ### `${cheat%%\*sheet}`
 
+[Here](https://tldp.org/LDP/abs/html/string-manipulation.html) is a useful reference for BASH string manipulation.
+
 ### `shopt -s extglob`
 
 <br>
@@ -368,6 +370,65 @@ To declare a new array, use `declare -a` ([see example](#declare-dynamic-name-ar
 For recommendations on storing complex data, see [Representing Objects](#-representing-objects) below.
 
 ## `IFS=$'\n'`
+
+To load an array with items separated by newlines:
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+# Run 'ls' and put each result into ar array
+IFS=$'\n' read -d '' -ra items < <(ls)
+
+# Read each line of a file into an array
+IFS=$'\n' read -d '' -ra items < myFile
+```
+
+Alternatively, you may want a string separated by a character such as `:`
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+# :-delimited string
+textItems="foo:hello world:bar"
+
+# Read the items into an array
+IFS=: read -d '' -ra items < <(printf "$textItems")
+
+echo "${#items[@]}"
+# => 3
+
+echo "${items[*]}"
+# => "foo hello world bar"
+
+# Or read a literal string in directly
+IFS=: read -d '' -ra items <<< <(printf "foo:hello world:bar")
+
+# ☝️ Gotcha: if you do this, there will be a trailing newline in the 'bar\n' item
+IFS=: read -d '' -ra items <<< "foo:hello world:bar"
+```
+
+## `find -print0`
+
+Related to `IFS`, to load an array with items from the `find` command:
+
+#### Example
+
+```sh
+# Create an array
+declare -a items=()
+
+local filePath
+while IFS= read -rd '' filePath
+do
+  items+=("$filePath")
+done < <(find . -name "*.sh" -print0)
+```
 
 ## `declare -A`
 
