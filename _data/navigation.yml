@@ -4,22 +4,24 @@ main:
     url: https://github.com/shells-sh/styles.sh
 styles:
   - title: 'my 2¢'
-    url: '#'
+    url: '#page-title'
     children:
       - title: '» Style Guide'
-        url: '#'
+        url: '#page-title'
 
   - title: '⌨️ Variables'
-    url: '#variables'
+    url: '#%EF%B8%8F-variables'
     children:
       - title: '<code>MYAPP_PUBLIC_VARIABLE</code>'
-        url: '#MYAPP-PUBLIC-VARIABLE'
-      - title: '<code>__myApp__privateVar</code>'
-        url: '#__myApp__privateVar'
-      - title: '<code>(set -o posix; set)</code>'
-        url: '#set--o-posix-set'
+        url: '#myapp_public_variable'
+      - title: '<code>_myApp_privateVar</code>'
+        url: '#_myapp_privatevar'
+      - title: '<code>declare</code>'
+        url: '#declare'
       - title: '<code>typeset -n</code>'
         url: '#typeset--n'
+      - title: '<code>(set -o posix; set)</code>'
+        url: '#set--o-posix-set'
 
   - title: '💬 Strings'
     url: '#strings'
@@ -48,7 +50,9 @@ styles:
         url: '#'
       - title: '<code>return</code>'
         url: '#'
-      - title: '<code>$OUT</code>'
+      - title: '<code>declare -f</code>'
+        url: '#'
+      - title: '<code>$OUT</code> <code>--out</code>'
         url: '#'
 
   - title: '💻 Commands'

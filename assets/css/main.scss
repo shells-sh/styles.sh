@@ -75,22 +75,22 @@ html {
   }
 
   div#main article.page section.page__content h1 {
-    font-size: 16px; // change to whatever
+    font-size: 22px; // change to whatever
 
     @include breakpoint($small) {
-      font-size: 18px; // change to whatever
+      font-size: 26px; // change to whatever
     }
 
     @include breakpoint($medium) {
-      font-size: 18px; // change to whatever
+      font-size: 28px; // change to whatever
     }
 
     @include breakpoint($large) {
-      font-size: 20px; // change to whatever
+      font-size: 30px; // change to whatever
     }
 
     @include breakpoint($x-large) {
-      font-size: 22px; // change to whatever
+      font-size: 30px; // change to whatever
     }
   }
 

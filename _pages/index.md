@@ -22,26 +22,31 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ---
 
-## ⌨️ Variables
+# ⌨️ Variables
 
-### `MYAPP_PUBLIC_VARIABLE`
+## `MYAPP_PUBLIC_VARIABLE`
 
 Name public global variables in `UPPERCASE`
 
-In general, **prefix** your global variable with something to identify to your users that the variable is associated with your script or program, e.g. `MYAPP_CONFIG_FILE`. This helps to avoid global naming collisions with variables in other libraries which your users may be using.
+Prefix your global variable with something to identify to your users that the variable is associated with your script or program, e.g. `MYAPP_CONFIG_FILE`.
 
-### `__myApp__privateVar`
+This helps to **avoid global naming collisions** with variables in other libraries which your users may be using.
+
+## `_myApp_privateVar`
 
 > ℹ️ All private variables should be `local` variables inside functions ([see more](#local))
 
-Local and non-public variables should be named in `camelCase`  
-(_although `snake_case` is more popular_)
+Name local and non-public variables in `camelCase` (_note:_ `snake_case` _is more popular_)
 
-In general, **prefix** your private variables to avoid naming collisions with variables in other libraries which your users may be using.
+Prefix your private variables with something associated with your script or program, e.g. `_myApp_configFile`.
 
-> 💡 Reminder: variables you assign (_including locals_) will be available to the scope of other functions that you call.
+This helps to **avoid global naming collisions** with variables in other libraries which your users may be using.
 
-#### ❌ Don't do this
+> 💡 Reminder: variables you assign will be available to the scope of other functions that you call.
+>
+> This includes `local` variables.
+
+### ❌ Don't do this
 
 ```sh
 myFunction() {
@@ -81,85 +86,193 @@ $ myFunction
 The final printed count should be 5, but it is 1 due to a naming collision.  
 Even though your variable is a `local`!
 
-### `(set -o posix; set)`
+## `declare`
 
-### `typeset -n`
+Use `declare` to define variables with dynamic names.
 
-## 💬 Strings
+```sh
+# This dynamic variable name is set in a variable
+variableName=foo
 
-### `cmd` or `"value"`
+# Declare the variable using its name from a variable
+declare "$variableName=42"
 
-### `grep` & `sed`
+echo "$foo"
+# => "42"
 
-### `${var/foo/bar}`
+# This can also be used to modify the value
+declare "$variableName=4"
 
-### `[[ "$1" = *"foo"* ]]`
+echo "$foo"
+# => "4"
+```
 
-## 🗃️ Arrays
+This also works for arrays:
 
-### `declare -a`
+```sh
+# This dynamic variable name is set in a variable
+variableName=foo
 
-### `declare -A`
+# 'foo' is undefined and has a zero length
+echo "${#foo[@]}"
+# => 0
 
-## 🏃‍♀️ Functions
+# Declare the variable using its name from a variable
+declare -a "$variableName=(hello world)"
 
-### `local`
+# 'foo' is defined as an array with a count of 2
+echo "${#foo[@]}"
+# => 2
 
-### `return`
+# The first array item is "hello"
+echo "${foo[0]}"
+# => "hello"
 
-### `$OUT`
+# This can also be used to push new values onto the array
+declare -a "$variableName+=(goodnight moon)"
 
-## 💻 Commands
+# Print all values of the array
+echo "${foo[*]}"
+# => "hello world goodnight moon"
+```
 
-### `main()`
+> 💡 **Note:** Using `declare` in a function assigns the variable as a `local`.
+>
+> BASH 4.2 adds `declare -g` which assigns the variable in the global scope.
 
-### `$*` or `$@`
+## `typeset -n`
 
-### `[ while "$#" -gt 0 ]`
+Use `typeset -n` to get a reference to a variable by using _the variable name_.
 
-### `case ... esac`
+> ℹ️ Note: this is only available in BASH 4.3 and above
 
-### `- <<< "Foo"`
+```sh
+hello="World"
 
-## 🐚 Subshells
+# Modify the value of hello using a variable which contains the variable name "hello"
+variableName=hello
+typeset -n theVariable="$variableName"
 
-### `$(cat myFile.txt)`
+echo "$theVariable"
+# => "World"
 
-### `$(<myFile.txt)`
+theVariable="change me"
 
-### `$?`
+echo "$theVariable"
+# => "change me"
 
-### `STDOUT & STDERR`
+echo "$hello"
+# => "change me"
+```
 
-## 📐 Math
+## `(set -o posix; set)`
 
-### `$(( i + 1 ))`
+This is the corrent way to get a definition of a variable:
 
-### `bc -l`
+```sh
+foo=5
+foo_list=(a b c)
 
-## 🐶 Representing Objects
+(set -o posix; set) | grep ^foo
+# foo=5
+# foo_list=([0]="a" [1]="b" [2]="c")
+```
 
-### `name:1;age:2;`
+> 💡 **Tip:** this is a great way to serialize variables including BASH arrays!
+>
+> The syntax provided by `(set -o posix; set)` can be safely `eval`'d to reload values.
+>
+> Consider using this for communicating variables across subshell boundaries.
 
-### `/dev/urandom`
+<br>
 
-### `^&,;+&|+`
+# 💬 Strings
 
-## 📦 Defining Blocks
+## `cmd` or `"value"`
 
-### `do ... end`
+## `grep` & `sed`
 
-## 🔬 Testing
+## `${var/foo/bar}`
 
-### `it.needs_tests()`
+## `[[ "$1" = *"foo"* ]]`
 
-## 📖 Documentation
+<br>
+# 🗃️ Arrays
 
-### `## # My Function`
+## `declare -a`
 
-### `>> "$apiDocs.md"`
+## `declare -A`
 
-## 🍏 Mac support
+<br>
+# 🏃‍♀️ Functions
+
+## `local`
+
+## `return`
+
+## `declare -f`
+
+## `$OUT` `--out`
+
+<br>
+# 💻 Commands
+
+## `main()`
+
+## `$*` or `$@`
+
+## `[ while "$#" -gt 0 ]`
+
+## `case ... esac`
+
+## `- <<< "Foo"`
+
+<br>
+ 🐚 Subshells
+
+## `$(cat myFile.txt)`
+
+## `$(<myFile.txt)`
+
+## `$?`
+
+## `STDOUT & STDERR`
+
+<br>
+# 📐 Math
+
+## `$(( i + 1 ))`
+
+## `bc -l`
+
+<br>
+# 🐶 Representing Objects
+
+## `name:1;age:2;`
+
+## `/dev/urandom`
+
+## `^&,;+&|+`
+
+<br>
+# 📦 Defining Blocks
+
+## `do ... end`
+
+<br>
+# 🔬 Testing
+
+## `it.needs_tests()`
+
+<br>
+# 📖 Documentation
+
+## `## # My Function`
+
+## `>> "$apiDocs.md"`
+
+<br>
+# 🍏 Mac support
 
 💡 **Recommendation:** Support Mac out-of-the-box, do not use newer BASH features.
 
@@ -175,7 +288,7 @@ Even though your variable is a `local`!
 > - [Indirect Variable References](#typeset--n)
 > - [Associative Arrays](#declare--a-1)
 
-### `3.2.57(1)-release`
+## `3.2.57(1)-release`
 
 Mac ships with a version of BASH which was [released in 2002](<https://en.wikipedia.org/wiki/Bash_(Unix_shell)#Release_history>): BASH 3.2.57(1)-release.
 
@@ -188,7 +301,7 @@ This is the last version of BASH which was shipped under the [GPLv2][] license, 
 
 Apple decided to stick with the [GPLv2][] version, even though it is 15 years old at the time of writing.
 
-### `zsh`
+## `zsh`
 
 > ℹ️ Starting with macOS Catalina, Macs now use [`zsh`][] as the default shell.
 >
@@ -196,7 +309,7 @@ Apple decided to stick with the [GPLv2][] version, even though it is 15 years ol
 
 [`zsh`]: https://en.wikipedia.org/wiki/Z_shell
 
-### `BASH 4` + `BASH 5`
+## `BASH 4` + `BASH 5`
 
 BASH 4 and 5 added useful features for developers and script authors, e.g.
 
@@ -205,7 +318,7 @@ BASH 4 and 5 added useful features for developers and script authors, e.g.
 
 If you want your BASH script to support Mac, you will not be able to use these features.
 
-### `$variableName`
+## `$variableName`
 
 If your BASH scripts use variables with dynamic names, you will need to use `eval`.
 
@@ -244,13 +357,13 @@ echo "$hello"
 # => "change me"
 ```
 
-### `Docker`
+## `Docker`
 
 If you are not developing on a Mac, it is recommended that you test your
 application against Mac's `3.2.57` version of BASH using Docker and/or
 configure your cloud test provider to run your tests on a Mac device.
 
-#### Example
+### Example
 
 Create a `Dockerfile`:
 
