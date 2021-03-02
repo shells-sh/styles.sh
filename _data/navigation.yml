@@ -37,9 +37,9 @@ styles:
     url: '#arrays'
     children:
       - title: '<code>declare -a</code>'
-        url: '#'
+        url: '#declare--a'
       - title: '<code>declare -A</code>'
-        url: '#'
+        url: '#declare--a-1'
 
   - title: '🏃‍♀️ Functions'
     url: '#functions'

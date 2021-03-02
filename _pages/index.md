@@ -293,7 +293,26 @@ var="${var%% *}"
 
 ## `declare -a`
 
+The BASH array is the most powerful tool in anyone's BASH arsenal.
+
+It's a very simple single-dimensional array of text values.
+
+Because BASH `3.2.57` doesn't support Associative Arrays (see [Mac Support](#-mac-support)),
+this is the primary data structure upon which all BASH libraries and applications are built!
+
+> 💕 Learn to love the single-dimensional BASH array
+
+To declare a new array, use `declare -a` ([see example](#declare-dynamic-name-array) above)
+
+> 💡 **Reminder:** `declare -a` assigns the array as a `local` variable in functions.
+
+For recommendations on storing complex data, see [Representing Objects](#-representing-objects) below.
+
 ## `declare -A`
+
+I have nothing to say about BASH Associative Arrays.
+
+I almost never use them because I try to natively support BASH `3.2.57`.
 
 <br>
 # 🏃‍♀️ Functions
