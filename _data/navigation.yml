@@ -36,7 +36,7 @@ styles:
         url: '#shopt--s-extglob'
 
   - title: '🗃️ Arrays'
-    url: '#-arrays'
+    url: '#%EF%B8%8F-arrays'
     children:
       - title: '<code>declare -a</code>'
         url: '#declare--a'
@@ -48,7 +48,7 @@ styles:
         url: '#declare--a-1'
 
   - title: '🏃‍♀️ Functions'
-    url: '#-functions'
+    url: '#%EF%B8%8F-functions'
     children:
       - title: '<code>local</code>'
         url: '#'
