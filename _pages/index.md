@@ -12,14 +12,14 @@ sidebar:
 
 _This document contains my **personal** preferences only._
 
-_These style guidelines are intended for BASH libraries and applications._  
+_These style guidelines are intended for Bash libraries and applications._  
 _This is less relevant for simple shell scripts, although perhaps useful._
 
 ### Please be kind.
 
 _I am sharing this in the hopes that some may find this interesting or useful. ~ [@bex](https://github.com/beccasaurus)_
 
-> _Note: there are no shout outs to any projects or tools, generic [BASH][] code only._
+> _Note: there are no shout outs to any projects or tools, generic [Bash][] code only._
 
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 
@@ -125,13 +125,13 @@ echo "${foo[*]}"
 
 > 💡 **Note:** Using `declare` in a function assigns the variable as a `local`.
 >
-> BASH 4.2 adds `declare -g` which assigns the variable in the global scope.
+> Bash 4.2 adds `declare -g` which assigns the variable in the global scope.
 
 ## `typeset -n`
 
 Use `typeset -n` to get a reference to a variable by using _the variable name_.
 
-> ℹ️ Note: this is only available in BASH 4.3 and above
+> ℹ️ Note: this is only available in Bash 4.3 and above
 
 #### Example
 
@@ -167,7 +167,7 @@ foo_list=(a b c)
 # foo_list=([0]="a" [1]="b" [2]="c")
 ```
 
-> 💡 **Tip:** this is a great way to serialize variables including BASH arrays!
+> 💡 **Tip:** this is a great way to serialize variables including Bash arrays!
 >
 > The syntax provided by `(set -o posix; set)` can be safely `eval`'d to reload values.
 >
@@ -202,16 +202,16 @@ dogs "setName" Rover
 
 ## `grep` & `sed` & `awk`
 
-When possible, use built-in BASH string manipulation and pattern matching over `grep`, `sed`, `awk`, et al.
+When possible, use built-in Bash string manipulation and pattern matching over `grep`, `sed`, `awk`, et al.
 However, keep your code's maintainability in mind and use these tools when it results in simpler code.
 
 ### `tl;dr`
 
-- Do not "blindly" reach for familiar tools such as `grep` and `sed` when BASH functionality would work just as well, if not better.
+- Do not "blindly" reach for familiar tools such as `grep` and `sed` when Bash functionality would work just as well, if not better.
 
 ### String Matching
 
-For simple values, prefer BASH string matching over `grep`.
+For simple values, prefer Bash string matching over `grep`.
 
 #### String Contains Example
 
@@ -243,7 +243,7 @@ if [[ "$var" =~ ^Hello ]]; then # ...
 
 ### String Manipulation
 
-Prefer BASH string manipulation over `sed`.
+Prefer Bash string manipulation over `sed`.
 
 #### String Replacement Example
 
@@ -261,7 +261,7 @@ var="${var/Hello/HELLO}"
 
 ### String Extraction
 
-Prefer BASH string manipulation over `awk` _depending on the need for performance._
+Prefer Bash string manipulation over `awk` _depending on the need for performance._
 
 #### String Extraction Example
 
@@ -290,7 +290,7 @@ var="${var%% *}"
 
 ### `${cheat%%\*sheet}`
 
-[Here](https://tldp.org/LDP/abs/html/string-manipulation.html) is a useful reference for BASH string manipulation.
+[Here](https://tldp.org/LDP/abs/html/string-manipulation.html) is a useful reference for Bash string manipulation.
 
 ### `shopt -s extglob`
 
@@ -300,14 +300,14 @@ var="${var%% *}"
 
 ## `declare -a`
 
-The BASH array is the most powerful tool in anyone's BASH arsenal.
+The Bash array is the most powerful tool in anyone's Bash arsenal.
 
 It's a very simple single-dimensional array of text values.
 
-Because BASH `3.2.57` doesn't support Associative Arrays (see [Mac Support](#-mac-support)),
-this is the primary data structure upon which all BASH libraries and applications are built!
+Because Bash `3.2.57` doesn't support Associative Arrays (see [Mac Support](#-mac-support)),
+this is the primary data structure upon which all Bash libraries and applications are built!
 
-> 💕 Learn to love the single-dimensional BASH array
+> 💕 Learn to love the single-dimensional Bash array
 
 To declare a new array, use `declare -a` ([see example](#declare-dynamic-name-array) above)
 
@@ -378,9 +378,9 @@ done < <(find . -name "*.sh" -print0)
 
 ## `declare -A`
 
-I have nothing to say about BASH Associative Arrays 🤷‍♀️
+I have nothing to say about Bash Associative Arrays 🤷‍♀️
 
-I almost never use them because I try to natively support BASH `3.2.57`.
+I almost never use them because I try to natively support Bash `3.2.57`.
 
 <br>
 
@@ -419,7 +419,7 @@ myFunction() {
 
 ## `return`
 
-BASH uses implicit returns, meaning the return code will be the `$?` return code of the last command run in your function - unless you explicitly `return`.
+Bash uses implicit returns, meaning the return code will be the `$?` return code of the last command run in your function - unless you explicitly `return`.
 
 Recommend you check for error cases, e.g. wrong number of arguments or invalid arguments, and explicitly `return 1`.
 
@@ -525,27 +525,27 @@ If you need to view the source code of a function: `declare -f functionName`
 
 # 🍏 Mac support
 
-💡 **Recommendation:** Support Mac out-of-the-box, do not use newer BASH features.
+💡 **Recommendation:** Support Mac out-of-the-box, do not use newer Bash features.
 
-> Many users of BASH use Mac and the easiest solution to supporting them is to author
-> your BASH code to support `3.2.57` out of the box.
+> Many users of Bash use Mac and the easiest solution to supporting them is to author
+> your Bash code to support `3.2.57` out of the box.
 >
-> (Optional) If so desired, create a branch of your code which branches on `$BASH_VERSION` and
+> (Optional) If so desired, create a branch of your code which branches on `$Bash_VERSION` and
 > uses an alternate, optimized version of your program which supports more modern
-> BASH features such as associative arrays and indirect variable references.
+> Bash features such as associative arrays and indirect variable references.
 >
-> See these alternate solutions to BASH 4.3+ features:
+> See these alternate solutions to Bash 4.3+ features:
 >
 > - [Indirect Variable References](#typeset--n)
 > - [Associative Arrays](#declare--a-1)
 
 ## `3.2.57(1)-release`
 
-Mac ships with a version of BASH which was [released in 2002](<https://en.wikipedia.org/wiki/Bash_(Unix_shell)#Release_history>): BASH 3.2.57(1)-release.
+Mac ships with a version of Bash which was [released in 2002](<https://en.wikipedia.org/wiki/Bash_(Unix_shell)#Release_history>): Bash 3.2.57(1)-release.
 
 **Why?**
 
-This is the last version of BASH which was shipped under the [GPLv2][] license, future versions switched to [GPLv3][].
+This is the last version of Bash which was shipped under the [GPLv2][] license, future versions switched to [GPLv3][].
 
 [gplv2]: https://en.wikipedia.org/wiki/GNU_General_Public_License#Version_2
 [gplv3]: https://en.wikipedia.org/wiki/GNU_General_Public_License#Version_3
@@ -562,18 +562,18 @@ Apple decided to stick with the [GPLv2][] version, even though it is 15 years ol
 
 ## `BASH 4` + `BASH 5`
 
-BASH 4 and 5 added useful features for developers and script authors, e.g.
+Bash 4 and 5 added useful features for developers and script authors, e.g.
 
 - Associative Arrays (_string key/value pairs_)
 - Indirect Variable References (_reference a variable using a dynamic variable name_)
 
-If you want your BASH script to support Mac, you will not be able to use these features.
+If you want your Bash script to support Mac, you will not be able to use these features.
 
 ## `$variableName`
 
-If your BASH scripts use variables with dynamic names, you will need to use `eval`.
+If your Bash scripts use variables with dynamic names, you will need to use `eval`.
 
-In BASH 4.3 (_unsupported on Mac_), you can use `typeset -n` to get an indirect reference
+In Bash 4.3 (_unsupported on Mac_), you can use `typeset -n` to get an indirect reference
 to a variable by name and modify that variable.
 
 ```sh
@@ -595,7 +595,7 @@ echo "$hello"
 # => "change me"
 ```
 
-BASH 3.2.57 required `eval` to work with variables with dynamic names.
+Bash 3.2.57 required `eval` to work with variables with dynamic names.
 
 ```sh
 hello="World"
@@ -611,7 +611,7 @@ echo "$hello"
 ## `Docker`
 
 If you are not developing on a Mac, it is recommended that you test your
-application against Mac's `3.2.57` version of BASH using Docker and/or
+application against Mac's `3.2.57` version of Bash using Docker and/or
 configure your cloud test provider to run your tests on a Mac device.
 
 ### Example
@@ -633,11 +633,11 @@ docker build -t bash3257 .
 # Successfully tagged bash3257:latest
 ```
 
-Run a BASH script in the local folder by mounting the folder and running it in a container via `bash`:
+Run a Bash script in the local folder by mounting the folder and running it in a container via `bash`:
 
 ```sh
 # [foo.sh]
-echo "hi from $BASH_VERSION"
+echo "hi from $Bash_VERSION"
 ```
 
 ```sh

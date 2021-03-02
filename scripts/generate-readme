@@ -11,7 +11,7 @@ YAML.load_file("_data/navigation.yml")["styles"].each do |nav_item|
   end
 end
 
-full_page = "🖌️ BASH Style Guide\n"
+full_page = "# 🖌️ BASH Style Guide\n"
 full_page += `cat _pages/index.md | tail +8`
 full_page.sub!('<!-- TOC -->', toc)
 
