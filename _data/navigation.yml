@@ -27,13 +27,11 @@ styles:
     url: '#strings'
     children:
       - title: '<code>cmd</code> or <code>"value"</code>'
-        url: '#'
-      - title: '<code>grep</code> & <code>sed</code>'
-        url: '#'
+        url: '#cmd-or-value'
+      - title: '<code>grep</code> & <code>sed</code> & <code>awk</code>'
+        url: '#grep--sed--awk'
       - title: '<code>${var/foo/bar}</code>'
-        url: '#'
-      - title: '<code>[[ "$1" = *"foo"* ]]</code>'
-        url: '#'
+        url: '#varfoobar'
 
   - title: '🗃️ Arrays'
     url: '#arrays'

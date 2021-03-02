@@ -12,6 +12,9 @@ sidebar:
 
 _This document contains my **personal** preferences only._
 
+_These style guidelines are intended for BASH libraries and applications._  
+_This is less relevant for simple shell scripts, although perhaps useful._
+
 ### Please be kind.
 
 _I am sharing this in the hopes that some may find this interesting or useful. ~ [@bex](https://github.com/beccasaurus)_
@@ -46,49 +49,27 @@ This helps to **avoid global naming collisions** with variables in other librari
 >
 > This includes `local` variables.
 
-### ❌ Don't do this
+#### Example
 
 ```sh
 myFunction() {
-  local count=5 # Set a local variable (unrelated to function called below)
-  calculate totals # Call the 'calculate' function
-  echo "The count is $count and the total is $TOTAL" # Print local variable
+  local privateValue=42 # <-- locals are in scope for called functions
+  anotherFunction
 }
 
-# ---------------------------
-# Function in another library:
-calculate() {
-  echo "You called calculate. The 'count' is $count"
-
-  # This other library is using the 'count' variable and they
-  # forgot to add 'local' or, in their library, 'count' is global.
-  #
-  # Modifications made to this variable will modify the parent
-  # function's local 'count' variable.
-  count=0
-
-  local item
-  for item in "CALCULATION_TOTALS[@]"
-  do
-    : $(( count++ ))
-  done
-  TOTAL="$count"
+anotherFunction() {
+  echo "The private value is $privateValue" # <-- 'local' value available
 }
-CALCULATION_TOTALS=(42)
-```
 
-```sh
-$ myFunction
-# You called calculate. The 'count' is 5
-# The count is 1 and the total is 1
+myFunction
+# => "The private value is 42"
 ```
-
-The final printed count should be 5, but it is 1 due to a naming collision.  
-Even though your variable is a `local`!
 
 ## `declare`
 
 Use `declare` to define variables with dynamic names.
+
+#### Declare Dynamic Name Variable
 
 ```sh
 # This dynamic variable name is set in a variable
@@ -107,7 +88,7 @@ echo "$foo"
 # => "4"
 ```
 
-This also works for arrays:
+#### Declare Dynamic Name Array
 
 ```sh
 # This dynamic variable name is set in a variable
@@ -127,7 +108,11 @@ echo "${#foo[@]}"
 # The first array item is "hello"
 echo "${foo[0]}"
 # => "hello"
+```
 
+#### Modify Dynamic Name Array
+
+```sh
 # This can also be used to push new values onto the array
 declare -a "$variableName+=(goodnight moon)"
 
@@ -145,6 +130,8 @@ echo "${foo[*]}"
 Use `typeset -n` to get a reference to a variable by using _the variable name_.
 
 > ℹ️ Note: this is only available in BASH 4.3 and above
+
+#### Example
 
 ```sh
 hello="World"
@@ -190,11 +177,116 @@ foo_list=(a b c)
 
 ## `cmd` or `"value"`
 
-## `grep` & `sed`
+If text represents a "value", use `"double quotes"`
+
+If text represents a command-line argument, use `no quotes`
+
+#### Example
+
+```sh
+dogs setName "Rover"
+
+# In the above example:
+# - 'setName' represents a command
+# - 'Rover' represents a value
+
+# There's no *technical* reason for the above not to be written as:
+dogs setName Rover
+dogs "setName" Rover
+"dogs" "setName" Rover
+"dogs" "setName" "Rover"
+# ^ These are all technically equivalent
+```
+
+## `grep` & `sed` & `awk`
+
+When possible, use built-in BASH string manipulation and pattern matching over `grep`, `sed`, `awk`, et al.
+However, keep your code's maintainability in mind and use these tools when it results in simpler code.
+
+### `tl;dr`
+
+- Do not "blindly" reach for familiar tools such as `grep` and `sed` when BASH functionality would work just as well, if not better.
+
+### String Matching
+
+For simple values, prefer BASH string matching over `grep`.
+
+#### String Contains Example
+
+```sh
+var="Hello World"
+
+# Goal: Determine if the value contains the text 'World'
+
+# ❌ Don't do this
+if [ echo "$var" | grep World ]; then # ...
+
+# ✅ Do this
+if [[ "$var" = *"World"* ]]; then # ...
+```
+
+#### String Matches Pattern Example
+
+```sh
+var=""
+
+# Goal: Determine is the value starts with 'Hello'
+
+# ❌ Don't do this
+if [ echo "$var" | grep ^Hello ]; then # ...
+
+# ✅ Do this
+if [[ "$var" =~ ^Hello ]]; then # ...
+```
+
+### String Manipulation
+
+Prefer BASH string manipulation over `sed`.
+
+#### String Replacement Example
+
+```sh
+var="Hello World"
+
+# Goal: Replace 'Hello' with 'HELLO'
+
+# ❌ Don't do this
+var="$( echo "$var" | sed 's/Hello/HELLO/' )"
+
+# ✅ Do this
+var="${var/Hello/HELLO}"
+```
+
+### String Extraction
+
+Prefer BASH string manipulation over `awk` _depending on the need for performance._
+
+#### String Extraction Example
+
+```sh
+var="Hello World Goodnight Moon"
+
+# Goal: Get the second space-delimited value
+
+# ❌ Don't do this
+var="$( echo "$var" | awk '{print $2}' )"
+
+# ✅ Do this
+var="${var*# }"
+var="${var%% *}"
+```
+
+> ☝️ Caveat: whereas `'{print $2}'` is easy to understand, the following is not:
+>
+> ```sh
+> var="${var*# }"
+> var="${var%% *}"
+> ```
+>
+> Keep in mind the performance requirements for your program and choose
+> what is right for you.
 
 ## `${var/foo/bar}`
-
-## `[[ "$1" = *"foo"* ]]`
 
 <br>
 # 🗃️ Arrays
