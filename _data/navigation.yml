@@ -66,6 +66,8 @@ styles:
         url: '#'
       - title: '<code>$*</code> or <code>$@</code>'
         url: '#'
+      - title: '<code>${1:-default}</code>'
+        url: '#'
       - title: '<code>[ while "$#" -gt 0 ]</code>'
         url: '#'
       - title: '<code>case ... esac</code>'

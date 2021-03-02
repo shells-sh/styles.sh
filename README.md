@@ -1,6 +1,4 @@
-> `NOTE` - This is out-of-date, need to write a script to keep it up-to-date, see https://styles.sh
-
-# 🖌️ BASH Style Guide
+🖌️ BASH Style Guide
 
 - Some programming styles are **personal preferences**.
 - Some programming styles are **company guidelines**.
@@ -20,6 +18,64 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 [bash]: https://en.wikipedia.org/wiki/Bash_(Unix_shell)
 
 ---
+
+ - [my 2¢](#page-title)
+   - [» Style Guide](#page-title)
+ - [⌨️ Variables](#%EF%B8%8F-variables)
+   - [<code>MYAPP_PUBLIC_VARIABLE</code>](#myapp_public_variable)
+   - [<code>_myApp_privateVar</code>](#_myapp_privatevar)
+   - [<code>declare</code>](#declare)
+   - [<code>typeset -n</code>](#typeset--n)
+   - [<code>(set -o posix; set)</code>](#set--o-posix-set)
+ - [💬 Strings](#strings)
+   - [<code>cmd</code> or <code>"value"</code>](#cmd-or-value)
+   - [<code>grep</code> & <code>sed</code> & <code>awk</code>](#grep--sed--awk)
+   - [<code>${cheat%%\*sheet}</code>](#)
+   - [<code>shopt -s extglob</code>](#shopt--s-extglob)
+ - [🗃️ Arrays](#arrays)
+   - [<code>declare -a</code>](#declare--a)
+   - [<code>IFS=$'\n'</code>](#ifs)
+   - [<code>find -print0</code>](#find-print0)
+   - [<code>declare -A</code>](#declare--a-1)
+ - [🏃‍♀️ Functions](#functions)
+   - [<code>local</code>](#)
+   - [<code>return</code>](#)
+   - [<code>declare -f</code>](#)
+   - [<code>$OUT</code> <code>--out</code>](#)
+ - [💻 Commands](#commands)
+   - [<code>main()</code>](#)
+   - [<code>$*</code> or <code>$@</code>](#)
+   - [<code>${1:-default}</code>](#)
+   - [<code>[ while "$#" -gt 0 ]</code>](#)
+   - [<code>case ... esac</code>](#)
+   - [<code>- <<< "Foo"</code>](#)
+ - [🐚 Subshells](#subshells)
+   - [<code>$(cat myFile.txt)</code>](#)
+   - [<code>$(&lt;myFile.txt)</code>](#)
+   - [<code>$?</code>](#)
+   - [<code>STDOUT</code> & <code>STDERR</code>](#)
+ - [📐 Math](#math)
+   - [<code>$(( i + 1 ))</code>](#)
+   - [<code>bc -l</code>](#)
+ - [🐶 Representing Objects](#representing-objects)
+   - [<code>name:1;age:2;</code>](#)
+   - [<code>/dev/urandom</code>](#)
+   - [<code>^&,;+&|+</code>](#)
+ - [📦 Defining Blocks](#defining-blocks)
+   - [<code>cmd { ... }</code>](#)
+   - [<code>do ... end</code>](#)
+ - [🔬 Testing](#testing)
+   - [<code>it.needs_tests()</code>](#)
+ - [📖 Documentation](#documentation)
+   - [<code>## # My Function</code>](#)
+   - [<code>>> "$apiDocs.md"</code>](#)
+ - [🍏 Mac support](#-mac-support)
+   - [<code>3.2.57(1)-release</code>](#32571-release)
+   - [<code>zsh</code>](#zsh)
+   - [<code>BASH 4</code> + <code>BASH 5</code>](#bash-4--bash-5)
+   - [<code>$variableName</code>](#variableName)
+   - [<code>Docker</code>](#docker)
+
 
 # ⌨️ Variables
 
@@ -390,6 +446,8 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `main()`
 
 ## `$*` or `$@`
+
+## `${1:-default}`
 
 ## `[ while "$#" -gt 0 ]`
 

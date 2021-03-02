@@ -25,6 +25,8 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 ---
 
+<!-- TOC -->
+
 # ⌨️ Variables
 
 ## `MYAPP_PUBLIC_VARIABLE`
@@ -394,6 +396,8 @@ If you need to view the source code of a function: `declare -f functionName`
 ## `main()`
 
 ## `$*` or `$@`
+
+## `${1:-default}`
 
 ## `[ while "$#" -gt 0 ]`
 
