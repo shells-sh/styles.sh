@@ -22,6 +22,8 @@ styles:
         url: '#typeset--n'
       - title: '<code>(set -o posix; set)</code>'
         url: '#set--o-posix-set'
+      - title: '<code>[ -n "${var+x}" ]</code>'
+        url: '#--n-varx-'
 
   - title: '💬 Strings'
     url: '#-strings'

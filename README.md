@@ -29,6 +29,7 @@ View the full style guide at https://styles.sh
    - [<code>declare</code>](#declare)
    - [<code>typeset -n</code>](#typeset--n)
    - [<code>(set -o posix; set)</code>](#set--o-posix-set)
+   - [<code>[ -n "${var+x}" ]</code>](#--n-varx-)
  - [💬 Strings](#-strings)
    - [<code>cmd</code> or <code>"value"</code>](#cmd-or-value)
    - [<code>grep</code> & <code>sed</code> & <code>awk</code>](#grep--sed--awk)
@@ -224,6 +225,39 @@ foo_list=(a b c)
 > The syntax provided by `(set -o posix; set)` can be safely `eval`'d to reload values.
 >
 > Consider using this for communicating variables across subshell boundaries.
+
+## `[ -n "${var+x}" ]`
+
+If you need to check if a variable is defined:
+
+#### Example
+
+```sh
+if [ -n "${var+x}" ]
+then
+  echo "The variable 'var' exists"
+else
+  echo "The variable 'var' has not been defined"
+fi
+```
+
+Do not simply check if the variable is empty (_unless that's what you are indending_):
+
+#### Example
+
+```sh
+[ -z "$var" ] # Checks if 'var' is a zero length / empty string
+              # but 'var' may be a defined variable
+```
+
+> 💡 **Tip:** It's usually find to simply check if a variable is `-n` zero-length or `-z` zero length, this code is much more understandable than `"${var+x}"`.
+>
+> Just make _sure_ you are _intentional_.
+>
+> - Check for blank when that's when you intend (`-z` `-n`)
+> - Check for variable exists when that's what you intend (`"${var+x}"`)
+
+ℹ️ For more information on `[ -n "${var+x}" ]` [here is a StackOverflow post](https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash) explaining it. _Note: I have run into problems using this without the `"` double quotes so I highly recommend using them!_
 
 <br>
 
@@ -744,9 +778,111 @@ The functions have conditionally assigned to those variables if they were provid
 
 ## `main()`
 
+In all of your BASH scripts, start using a `main()` function.
+
+#### ❌ Don't Do This
+
+```sh
+# [myScript.sh]
+
+myVar=5
+myArray=()
+
+for item in "$@"
+do
+  echo "the item: $item"
+done
+```
+
+#### ✅ Do This
+
+```sh
+# [myScript.sh]
+
+printTheValues() {
+  local myVar=5
+  local myArray=()
+  local item
+  for item in "$@"
+  do
+    echo "the item: $item"
+  done
+}
+
+main() { printTheValues "$@"; }
+
+[ "${BASH_SOURCE[0]}" = "$0" ] && main "$@"
+```
+
+It's just a good habit to get into!
+
+It's really nice because you get `local` variables.
+
+And if (_or when_) your script begins to grow in scope and size:
+
+- Using functions will help you organize it
+- Your script will be easier to `source` and use from other files
+
 ## `$*` or `$@`
 
+Don't use these interchangably.
+
+Explicitly use `$@` or `${array[@]}` when you intend to expand the value into multiple arguments.
+
+Explicitly use `$*` or `${array[*]}` when you simply want to view or print all of the values in a single argument.
+
+Programmers of other languages might want to think of `$@` as "splat" or "spread" params.
+
 ## `${1:-default}`
+
+To be honest, I don't find these this useful.
+
+But here is a nice reference for [Bash Parameter Substitution](https://tldp.org/LDP/abs/html/parameter-substitution.html).
+
+Programmers of other languages might want to think of this as `||=` or "or equals" operators.
+
+If you want to set a parameter to a value only if it's not already set:
+
+#### Example
+
+```sh
+FOO=123
+
+: "${FOO=456}" # <-- this won't set the value (already set)
+: "${BAR=456}" # <-- this will set the value
+
+echo "Foo: $FOO"
+# "Foo: 123"
+
+echo "Bar: $BAR"
+# "Bar: 456"
+```
+
+Personally, I find this to be more readable:
+
+```sh
+FOO=123
+
+[ -z "$FOO" ] || FOO=456 # <-- this won't set the value (already set)
+[ -z "$BAR" ] || BAR=456 # <-- this will set the value
+
+echo "Foo: $FOO"
+# "Foo: 123"
+
+echo "Bar: $BAR"
+# "Bar: 456"
+```
+
+> ☝️ Gotcha: using `${var=default}` may help prevent bugs.
+>
+> `: ${var=default}` will only assign if `var` does not exist
+>
+> If `var` is set to a blank string, this _will not assign_.
+>
+> In my other example, we are using `[ -z "$var" ]` which explicitly checks _"is this string empty?"_ and sets the value if it is blank.
+> The value could already be explicitly set to `""` but the second example will override that value.
+>
+> The two are **not equivalent**.
 
 ## `[ while "$#" -gt 0 ]`
 
