@@ -12,6 +12,8 @@ styles:
   - title: '⌨️ Variables'
     url: '#%EF%B8%8F-variables'
     children:
+      - title: '<code>myVariable</code>'
+        url: '#myvariable'
       - title: '<code>MYAPP_PUBLIC_VARIABLE</code>'
         url: '#myapp_public_variable'
       - title: '<code>_myApp_privateVar</code>'
@@ -82,8 +84,8 @@ styles:
   - title: '🐚 Subshells'
     url: '#-subshells'
     children:
-      - title: '<code>$(cat myFile.txt)</code>'
-        url: '#cat-myfiletxt'
+      - title: '<code>$(echo "Hello")</code>'
+        url: '#echo-hello'
       - title: '<code>$(&lt;myFile.txt)</code>'
         url: '#myfiletxt'
       - title: '<code>$?</code>'

@@ -29,6 +29,14 @@ _I am sharing this in the hopes that some may find this interesting or useful. ~
 
 # ⌨️ Variables
 
+## myVariable
+
+Name non-global variables in `camelCase`
+
+> This is probably the most controversial thing in this guide.
+>
+> Name variables however you like :P
+
 ## `MYAPP_PUBLIC_VARIABLE`
 
 Name public global variables in `UPPERCASE`
@@ -42,10 +50,6 @@ This helps to **avoid global naming collisions** with variables in other librari
 _This recommendation is for **library code**._  
 _Scripts and programs do not generally need to prefix variables._
 
-> ℹ️ All private variables should be `local` variables inside functions ([see more](#local))
-
-Name local and non-public variables in `camelCase` (_note:_ `snake_case` _is more popular_)
-
 Prefix your private variables with something associated with your script or program, e.g. `_myApp_configFile`.
 
 This helps to **avoid global naming collisions** with variables in other libraries which your users may be using.
@@ -54,7 +58,7 @@ This helps to **avoid global naming collisions** with variables in other librari
 >
 > This includes `local` variables.
 
-☝️ **Note:** Most of the examples in this style guide _do **not**_ follow this recommendation (_for ease of reading_).
+> ℹ️ All private variables should be `local` variables inside functions ([see more](#local))
 
 #### Example
 
@@ -981,7 +985,7 @@ echo "Hello, goodbye" | printProvidedValue -
 # => "The value from STDIN is: Hello, goodbye"
 ```
 
-You _can_ check if `STDIN` is present and use that when present, but NOT recommended. This is _slow_ and works by reading with a short timeout if `STDIN` is not present:
+If you're using Bash 4+, then _can_ check if `STDIN` is present and use that when present:
 
 #### Example (_read from `STDIN` when present_)
 
@@ -989,7 +993,7 @@ You _can_ check if `STDIN` is present and use that when present, but NOT recomme
 # If data is present in STDIN, print that
 # otherwise print the provided argument
 printProvidedValue() {
-  if read -t 0 -N 0
+  if read -t 0 -N 0 # <-- read -N requires BASH 4+
   then
     echo "The value from STDIN is: $(</dev/stdin)"
   else
@@ -1011,13 +1015,82 @@ echo "Hello, goodbye" | printProvidedValue -
 
 # 🐚 Subshells
 
-## `$(cat myFile.txt)`
+- Subshells are your friend - when you want them to be.
+- Subshells are your enemy - when you least expect it.
+
+Subshells are really lovely and lightweight (_thank you Bash!_)
+
+I would still recommend avoiding them when writing library code.  
+If it's unnecessary to "_shell out_", then don't do it.
+
+Perhaps the very very very most important thing to remember about subshells is:
+
+- They _can_ read your global variables
+- They _can_ execute _functions_, not just binaries
+- When shelling out to functions, they _can_ read your `local` variables!
+- They _can_ **not** _modify_ any variables
+- Using `out` style variables ([defined above](#out-function-variables-return-values)) will _not_ work
+
+If you want to run a subshell and have it update a variable - no.
+
+> 💡 **Tip:** if you really must pass complex state from a child subshell to the parent, you can use `( set -o posix; set ) | grep VARNAME` to serialize desired variables in the subshell and print out the results. The parent can `eval` the resulting code to inflate the deserialized objects (_including Bash arrays_).
+
+## `$(echo "Hello")`
+
+When creating a subshell, always use the `$( ... )` syntax (_not the backtick syntax_)
 
 ## `$(<myFile.txt)`
 
+When you want the contents of a file, use `$(<file/path)`
+
+This also works for `STDIN`: `echo "The STDIN is: $(</dev/stdin)"`
+
 ## `$? code`
 
+☝️ Gotcha: to get the `$?` exit code of a subshell, you most store the output of the program in a variable (_even if you don't intend to use it_)
+
+#### Example (_get `$?` from subshell_)
+
+```sh
+: "$( ls this/dir/doesnt/exist &>/dev/null )"
+echo "$?"
+# => 0  <-- whaaaa??????? yep.
+
+_="$( ls this/dir/doesnt/exist &>/dev/null )"
+echo "$?"
+# => 2  <--- this is correct, needed to store output in a variable
+```
+
 ## `STDOUT & STDERR`
+
+If you want to store the `STDOUT` and `STDERR` of a subshell separately, you'll need to store one of them in a temporary file.
+
+#### Example (_get `STDOUT` and `STDERR` separately from subshell_)
+
+```sh
+theFunction() {
+  echo "Hello from STDOUT"
+  echo "Hello from STDERR" >&2
+}
+
+main() {
+  local stderrFile="$( mktemp )"
+  local stdout="$( theFunction 2>"$stderrFile" )"
+  local exitCode=$?
+  local stderr="$(<"$stderrFile")"
+  rm "$stderrFile"
+  echo "Ran theFunction"
+  echo "STDOUT: $stdout"
+  echo "STDERR: $stderr"
+  echo "Exit Status: $?"
+}
+
+main
+# => "Ran theFunction"
+# => "STDOUT: Hello from STDOUT"
+# => "STDERR: Hello from STDERR"
+# => "Exit Status: 0"
+```
 
 <br>
 
@@ -1025,7 +1098,50 @@ echo "Hello, goodbye" | printProvidedValue -
 
 ## `$(( i + 1 ))`
 
+Bash can perform simple integer math
+
+#### Example (_simple Bash math_)
+
+```sh
+x=42
+
+echo "$(( x + 8 ))"
+# => 50
+
+echo "$(( x - 2 ))"
+# => 40
+
+: $(( x++ ))
+echo "$x"
+# => 43
+
+echo "$(( x / 10 ))"
+# => 4
+
+echo "$(( x % 10 ))"
+# => 3
+```
+
 ## `bc -l`
+
+If you need to perform division / need floating point numbers, use `bc`
+
+#### Example (_`bc` math_)
+
+```sh
+x=42
+
+bc -l <<< "$x / 10"
+# => 4.20000000000000000000
+
+# Or this style:
+echo "$x / 10" | bc -l
+# => 4.20000000000000000000
+
+# To limit the precision:
+bc -l <<< "scale=2; $x / 10"
+# => 4.20
+```
 
 <br>
 
