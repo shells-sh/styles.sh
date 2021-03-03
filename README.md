@@ -260,7 +260,7 @@ Do not simply check if the variable is empty (_unless that's what you are indend
               # but 'var' may be a defined variable
 ```
 
-> 💡 **Tip:** It's usually find to simply check if a variable is `-n` zero-length or `-z` zero length, this code is much more understandable than `"${var+x}"`.
+> 💡 **Tip:** It's usually fine to simply check if a variable is `-n` zero-length or `-z` zero length, this code is much more understandable than `"${var+x}"`.
 >
 > Just make _sure_ you are _intentional_.
 >
