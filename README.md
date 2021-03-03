@@ -65,7 +65,6 @@ View the full style guide at https://styles.sh
  - [🐶 Representing Objects](#-representing-objects)
    - [<code>name:1;age:2;</code>](#name1age2)
    - [<code>/dev/urandom</code>](#devurandom)
-   - [<code>^&,;+&|+</code>](#-characters)
  - [📦 Defining Blocks](#-defining-blocks)
    - [<code>cmd { ... }</code>](#cmd---)
    - [<code>do ... end</code>](#do--end)
@@ -1202,11 +1201,179 @@ bc -l <<< "scale=2; $x / 10"
 
 # 🐶 Representing Objects
 
+> This section is less relevant to users of BASH 4+ which includes Associative Arrays
+
+When coding against Bash `3.2.57`, you're "stuck" with single dimensional Bash arrays.
+
+This section covers just the basics of some of my favorite patterns for storing complex data in Bash arrays.
+
 ## `name:1;age:2;`
+
+> Index lookup fields.
+
+If your object has a set of _known_ properties, you can simply map each property to a particular index identifier and be on your way!
+
+```sh
+Dog.getName() { eval "printf \"\${$1[0]}\""; }
+Dog.getBreed() { eval "printf \"\${$1[1]}\""; }
+Dog.getAge() { eval "printf \"\${$1[2]}\""; }
+
+rover=("Rover" "Golden Retriever" "2")
+spot=("Spot" "Daschund" "4")
+
+Dog.getBreed rover
+# => "Golden Retriever"
+
+Dog.getAge spot
+# => 4
+```
+
+> ℹ️ `eval` is used in these samples for Bash `3.2.57` compatibility
+>
+> Using Bash 4.3+ the above functions could be written as:
+>
+> ```sh
+> Dog.getName() {
+>   local dogArray
+>   typeset -n dogArray="$1" # <--- See 'typeset -n' section for more info
+>   printf "${dogArray[0]}"
+> }
+> ```
+
+But, if:
+
+- Your object has an unknown set of properties
+- You want to save object space and only assign indices for set properties
+
+Then, I recommend creating your own Index Lookup Field
+
+### Index Lookup Fields
+
+If your object has multiple properties _with simple names\*_, then you can very easily create a key/value index (_like that of an associative array_)
+
+#### Example (_complete key/value store - for **simple** keys_)
+
+```sh
+# Creating an object creates array with empty field lookup.
+# For simplicity in this example, the user provides a simple
+# object identifier to which is used in the array variable name.
+# Really you should control the identifier yourself, e.g. random number.
+Object.create() { eval "OBJECTS_$1=(\"\")"; }
+
+# Find out if the object contains the given key
+# $1 - Object identifier
+# $2 - Simple key
+Object.hasKey() {
+  eval "[[ \"\${OBJECTS_$1[0]}\" = *\";\$2\"* ]]"
+}
+
+# $1 - Object identifier
+# $2 - Simple key
+Object.get() {
+  local valueIndex
+  if Object.hasKey "$1" "$2"; then
+    __Object.getValueIndex "$1" "$2" valueIndex
+    eval "printf \"\${OBJECTS_$1[\$valueIndex]}\""
+  fi
+}
+
+# $1 - Object identifier
+# $2 - Simple key
+# $3 - Value
+Object.set() {
+  local valueIndex
+  if Object.hasKey "$1" "$2"; then
+    __Object.getValueIndex "$1" "$2" valueIndex
+    eval "OBJECTS_$1[\$valueIndex]=\"\$3\""
+  else
+    # Add this field to the index (using the size of the current array)
+    eval "OBJECTS_$1[0]=\"\${OBJECTS_$1[0]};\$2:\${#OBJECTS_$1[@]}\""
+    # Add the value
+    eval "OBJECTS_$1+=(\"\$3\")"
+  fi
+}
+
+# Take a look at the underlying BASH array!
+# $1 - Object identifier
+Object.dump() { ( set -o posix; set ) | grep "^OBJECTS_$1="; }
+
+# @private
+# Get the index of the value field for the given key, if present in the object
+# $1 - Object identifier
+# $2 - Simple key
+# $3 - `out` index value
+__Object.getValueIndex() {
+  if Object.hasKey "$1" "$2"; then
+    local indexLookupField
+    eval "indexLookupField=\"\${OBJECTS_$1[0]}\""
+    indexLookupField="${indexLookupField#*;${2}:}" # Remove everything to the left of the index
+    printf -v "$3" "${indexLookupField%%;*}" # Remove everything to the right of the index and return
+  fi
+}
+```
+
+And now, try it out:
+
+```sh
+Object.create rover
+Object.get rover breed
+# => ""
+Object.set rover breed "Golden Retriever"
+Object.get rover breed
+# => "Golden Retriever"
+Object.create spot
+
+Object.set spot breed "Golden Retriever"
+Object.set spot name "Spot"
+Object.dump spot
+# => OBJECTS_spot=([0]=";breed:1;name:2" [1]="Golden Retriever" [2]="Spot")
+```
+
+We basically just made our own Associative Array which works for _simple keys_ (_that do not contain some separator we define_).
+
+> ℹ️ Our simple key/value store also has a _nearly_ `O(1)` constant time lookup.
+>
+> - As the number of keys + length of their characters increases, the Bash string manipulation to extract the index for each key will become slower. But it is not `O(N)`, there is no looping, the quick string manipulation gets us a _pretty good_ data structure!
 
 ## `/dev/urandom`
 
-## `^&,;+&|+ characters`
+Rather than having users provide their own simple key (_which we used as part of the variable name_), you can control the Bash variable name yourself and hand each user an object identifier.
+
+This example uses `/dev/urandom` to get a random string to act as an object identifier:
+
+#### Example (_using randomly generated Object IDs_)
+
+```sh
+# $1 - `out` variable name to store object identifier
+Object.create() {
+  local objectId="$( cat /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 )"
+  eval "OBJECTS_$objectId=(\"\")"
+  printf -v "$1" "$objectId"
+}
+
+# ...
+```
+
+Now try the same example above but using the new `Object.create`:
+
+```sh
+main() {
+  local rover
+  Object.create rover
+  Object.set $rover breed "Golden Retriever"
+  Object.dump $rover
+  # => OBJECTS_PnIIwehw9DGvuwgXCK8ecWF309M3RyU5=([0]=";breed:1" [1]="Golden Retriever")
+
+  local spot
+  Object.create spot
+  Object.set $spot name "Spot"
+  Object.set $spot breed "Daschund"
+  Object.dump $spot
+  # => OBJECTS_HXBPI288osbbhGlYnA7gWqgH1Dur38lV=([0]=";name:1;breed:2" [1]="Spot" [2]="Daschund")
+}
+
+main
+```
 
 <br>
 

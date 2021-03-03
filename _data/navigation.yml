@@ -108,8 +108,6 @@ styles:
         url: '#name1age2'
       - title: '<code>/dev/urandom</code>'
         url: '#devurandom'
-      - title: '<code>^&,;+&|+</code>'
-        url: '#-characters'
 
   - title: '📦 Defining Blocks'
     url: '#-defining-blocks'
