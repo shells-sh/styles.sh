@@ -501,6 +501,10 @@ I have nothing to say about Bash Associative Arrays 🤷‍♀️
 
 I almost never use them because I try to natively support Bash `3.2.57`.
 
+They're great, have fun with them!
+
+> See [🍏 Mac Support](#-mac-support)
+
 <br>
 
 # 🏃‍♀️ Functions
