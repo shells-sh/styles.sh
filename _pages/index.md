@@ -1426,6 +1426,66 @@ echo "$x"
 
 ## `do ... end`
 
+Another way to extend your Bash library or framework's syntax is providing your own `do/end` blocks.
+
+Bash has a `done` keyword (_similar to `fi` and `esac`_) for closing blocks.
+
+There is no `end` keyword, so I like using this for my own syntax.
+
+**Recommendation**: every library/framework should support `end`
+
+To do this with my libraries, I have what I call an `END_STACK`.
+
+#### Example
+
+```sh
+# --- some fake library code
+describe() { END_STACK+=("My Library:Describe Block:$1"); }
+example() { END_STACK+=("My Library:Test Block:$1"); }
+# ---
+
+END_STACK=()
+end() { [ "${#END_STACK[@]}" -gt 0  ] && unset END_STACK["$(( ${#END_STACK[@]} - 1 ))"]; }
+
+printEndStack() { ( set -o posix; set ) | grep ^END_STACK=; }
+
+printEndStack
+
+describe "Group of tests" do
+  printEndStack
+
+  example "my test" do
+    : # some predefined DSL commands
+    printEndStack
+  end
+
+  printEndStack
+
+  example "different test" do
+    : # some predefined DSL commands
+    printEndStack
+  end
+
+end
+
+printEndStack
+```
+
+Outputs:
+
+```
+END_STACK=()
+END_STACK=([0]="My Library:Describe Block:Group of tests")
+END_STACK=([0]="My Library:Describe Block:Group of tests" [1]="My Library:Test Block:my test")
+END_STACK=([0]="My Library:Describe Block:Group of tests")
+END_STACK=([0]="My Library:Describe Block:Group of tests" [1]="My Library:Test Block:different test")
+END_STACK=()
+```
+
+Any commands running can _check if they are in a current `END_STACK` scope_ and perform actions accordingly, knowing that they are in that scope.
+
+Feel free to play with this pattern for your own DSLs!
+
 <br>
 
 # 🔬 Testing
