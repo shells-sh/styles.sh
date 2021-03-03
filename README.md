@@ -1488,6 +1488,21 @@ There is no `end` keyword, so I like using this for my own syntax.
 
 To do this with my libraries, I have what I call an `END_STACK`.
 
+Here is an example:
+
+```sh
+describe "Group of tests" do
+  example "my test" do
+    : # some predefined DSL commands
+  end
+  example "different test" do
+    : # some predefined DSL commands
+  end
+end
+```
+
+Below, let's put this into action:
+
 #### Example
 
 ```sh
