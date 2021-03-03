@@ -1432,8 +1432,6 @@ Bash has a `done` keyword (_similar to `fi` and `esac`_) for closing blocks.
 
 There is no `end` keyword, so I like using this for my own syntax.
 
-**Recommendation**: every library/framework should support `end`
-
 To do this with my libraries, I have what I call an `END_STACK`.
 
 #### Example
