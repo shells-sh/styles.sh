@@ -225,9 +225,9 @@ _Note: I have run into problems using this without the `"` double quotes so I hi
 
 ## `cmd` or `"value"`
 
-If text represents a "value", use `"double quotes"`
+If text _represents_ a "value", use `"double quotes"`
 
-If text represents a command-line argument, use `no quotes`
+If text _represents_ a command-line argument, use `no quotes`
 
 #### Example
 
