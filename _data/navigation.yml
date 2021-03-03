@@ -41,7 +41,7 @@ styles:
       - title: '<code>declare -a</code>'
         url: '#declare--a'
       - title: "<code>IFS=$'\\n'</code>"
-        url: '#ifs'
+        url: '#ifsn'
       - title: '<code>find -print0</code>'
         url: '#find-print0'
       - title: '<code>declare -A</code>'
@@ -56,8 +56,8 @@ styles:
         url: '#return'
       - title: '<code>declare -f</code>'
         url: '#declare--f'
-      - title: '<code>$OUT</code> <code>--out</code>'
-        url: '#out--out'
+      - title: '<code>out</code>'
+        url: '#out-function-variables-return-values'
 
   - title: '💻 Commands'
     url: '#-commands'

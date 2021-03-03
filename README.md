@@ -36,14 +36,14 @@ View the full style guide at https://styles.sh
    - [<code>shopt -s extglob</code>](#shopt--s-extglob)
  - [🗃️ Arrays](#%EF%B8%8F-arrays)
    - [<code>declare -a</code>](#declare--a)
-   - [<code>IFS=$'\n'</code>](#ifs)
+   - [<code>IFS=$'\n'</code>](#ifsn)
    - [<code>find -print0</code>](#find-print0)
    - [<code>declare -A</code>](#declare--a-1)
  - [🏃‍♀️ Functions](#%EF%B8%8F-functions)
    - [<code>local</code>](#local)
    - [<code>return</code>](#return)
    - [<code>declare -f</code>](#declare--f)
-   - [<code>$OUT</code> <code>--out</code>](#out--out)
+   - [<code>out</code>](#out-function-variables-return-values)
  - [💻 Commands](#-commands)
    - [<code>main()</code>](#main)
    - [<code>$*</code> or <code>$@</code>](#-or-)
@@ -565,12 +565,178 @@ myFunction() {
 
 If you need to view the source code of a function: `declare -f functionName`
 
+```sh
+myFunction() { echo Hello; }
+
+declare -f myFunction
+# myFunction ()
+# {
+#     echo Hello
+# }
+```
+
 > 💡 **Tip:** If you need to copy a function, you can get the source code from `declare -f functionName`,
 > replace the name at the start of the source code, and `eval` the source code.
 
-## `$OUT` `--out`
+## `out` Function Variables (Return Values)
 
-`TODO`
+In most modern programming languages, it is common to invoke a method to get and use some kind of a **return value**.
+
+Bash functions _do not have return values_, only status codes (e.g. `return 1`)
+
+The most common way to use a Bash function to get a value is:
+
+- Create a function which _returns its value_ by printing it:
+  > ```sh
+  > myFunction() {
+  >   printf "This is the return value"
+  > }
+  > ```
+- Call that function in a subshell and use its output as the _"return value"_:
+  > ```sh
+  > local returnValue="$( myFunction )"
+  > echo "$returnValue"
+  > # => "This is the return value"
+  > ```
+
+There are 2 main problems with this approach:
+
+- **Performance:** this creates a new subshell (_which is really not necessary_)
+- **Scope & Bugs:** the subshell _CANNOT MODIFY ANY GLOBAL VARIABLES_
+  > _This has a lovely tendency to create bugs!_
+
+> ℹ️ **Note:** the are often great reasons to run functions in subshells!
+
+The best pattern for getting _return values_ from functions is by using `out` variables.
+
+#### Solution: use `out` variables
+
+C# is an example of a language which supports `out` variables. The method can modify the value of a provided parameter (_the parameter is updated in its original scope_).
+
+We can reproduce the same using Bash:
+
+```sh
+main() {
+  local name
+  getName name
+  echo "The return value is: $name"
+}
+
+# This returns the name of something.
+# The first argument is the name of the 'out' variable.
+getName() {
+  local outVariableName="$1"
+  local theReturnValue="Rover"
+
+  # Assign the value to the provided variable name
+  printf -v "$outVariableName" "$theReturnValue"
+}
+
+main
+# => "The return value is: Rover"
+```
+
+> 💡 **Tip:** `printf -v $variableName` will not output to STDOUT, instead it will assign the value to the provided variable.
+
+Note: `getName()` in this example never _prints_ any value. Which isn't super useful.
+
+**Recommendation:** Your functions should print "return values" _unless_ an `out` variable is provided.
+
+```sh
+# Expects either zero arguments (in which case it will print)
+#             or one argument (in which case it will assign)
+getName() {
+  local theReturnValue="Rover"
+  if [ -z "$1" ]
+  then
+    printf "$theReturnValue"
+  else
+    printf -v "$outVariableName" "$theReturnValue"
+  fi
+}
+
+```
+
+#### Multiple Return Values
+
+You can use the same pattern to return:
+
+- Multiple return values
+- Populate a provided array
+
+Here is a sample that demonstrates both:
+
+```sh
+# Sample data
+DOG_NAMES=(Rover Spot Rex)
+DOG_BREEDS=("Golden Retriever" "Pomeranian" "Daschund")
+DOG_TOYS=("Bone:Squeeky Toy" "Bone" "Kong:Sqeeky Toy")
+
+##
+# This sample shows (a) multiple return values
+#                   (b) conditionally printing -vs- assigning variables
+#
+# You might want to have this in two separate functions, e.g.
+# - printDogInfo
+# - loadDogInfo
+##
+
+# Print or get the information about a dog given its number (index)
+#
+# $1 - The dog index
+# $@ - (Optional) `out` variable names
+#
+getDogInfo() {
+  local __dogInfo__index="$1"; shift
+  if [ $# -eq 0 ]
+  then
+    echo "Name: ${DOG_NAMES[__dogInfo__index]}"
+    echo "Breed: ${DOG_BREEDS[__dogInfo__index]}"
+    echo "Favorite Toys: ${DOG_TOYS[__dogInfo__index]//:/ }"
+  else
+    printf -v "$1" "${DOG_NAMES[__dogInfo__index]}"
+    printf -v "$2" "${DOG_BREEDS[__dogInfo__index]}"
+    IFS=: read -d '' -ra "$3" < <(printf "${DOG_TOYS[__dogInfo__index]}")
+  fi
+}
+
+main() {
+  local dogName
+  local dogBreed
+  declare -a dogToys
+
+  # Call a function providing regular parameter
+  # in addition to the names of multiple variables
+  # to get as return values
+  getDogInfo 0 dogName dogBreed dogToys
+
+  echo "$dogName is a $dogBreed and loves their toys: ${dogToys[*]}"
+
+  # Call getDogInfo normally without --out arguments
+  getDogInfo
+}
+
+main
+
+# Rover is a Golden Retriever and loves their toys: Bone Squeeky Toy
+
+# Name: Rover
+# Breed: Golden Retriever
+# Favorite Toys: Bone Squeeky Toy
+```
+
+#### Specifying `out` Variable Names
+
+In the examples this far, `out` variables have been specified as _optional_ additional command line arguments.
+
+The functions have conditionally assigned to those variables if they were provided.
+
+**Recommendations:**
+
+- Use separate functions named `printFoo` and `loadFoo`
+- -or-
+- Use the pattern shown above (_optional additional arguments_)
+  > ^ _This has worked very well for me in my libraries!_
 
 <br>
 
