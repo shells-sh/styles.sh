@@ -39,7 +39,7 @@ View the full style guide at https://styles.sh
  - [🗃️ Arrays](#%EF%B8%8F-arrays)
    - [<code>declare -a</code>](#declare--a)
    - [<code>IFS=$'\n'</code>](#ifsn)
-   - [<code>find -print0</code>](#find-print0)
+   - [<code>find -print0</code>](#find--print0)
    - [<code>declare -A</code>](#declare--a-1)
  - [🏃‍♀️ Functions](#%EF%B8%8F-functions)
    - [<code>local</code>](#local)
@@ -47,7 +47,7 @@ View the full style guide at https://styles.sh
    - [<code>declare -f</code>](#declare--f)
    - [<code>out</code>](#out-function-variables-return-values)
  - [💻 Commands](#-commands)
-   - [<code>main()</code>](#main)
+   - [<code>main()</code>](#main-function)
    - [<code>$*</code> or <code>$@</code>](#-or-)
    - [<code>${1:-default}</code>](#1-default)
    - [<code>[ while $# -gt 0 ]</code>](#-while---gt-0-)
@@ -57,7 +57,7 @@ View the full style guide at https://styles.sh
  - [🐚 Subshells](#-subshells)
    - [<code>$(echo "Hello")</code>](#echo-hello)
    - [<code>$(&lt;myFile.txt)</code>](#myfiletxt)
-   - [<code>$?</code>](#code)
+   - [<code>$?</code>](#-code)
    - [<code>STDOUT</code> & <code>STDERR</code>](#stdout--stderr)
  - [📐 Math](#-math)
    - [<code>$(( i + 1 ))</code>](#-i--1-)
@@ -77,7 +77,7 @@ View the full style guide at https://styles.sh
    - [<code>3.2.57(1)-release</code>](#32571-release)
    - [<code>zsh</code>](#zsh)
    - [<code>BASH 4</code> + <code>BASH 5</code>](#bash-4--bash-5)
-   - [<code>$variableName</code>](#variableName)
+   - [<code>$variableName</code>](#variablename)
    - [<code>Docker</code>](#docker)
 
 
@@ -796,7 +796,7 @@ The functions have conditionally assigned to those variables if they were provid
 
 # 💻 Commands
 
-## `main()`
+## `main()` function
 
 In all of your BASH scripts, start using a `main()` function.
 

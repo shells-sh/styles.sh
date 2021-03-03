@@ -744,7 +744,7 @@ The functions have conditionally assigned to those variables if they were provid
 
 # 💻 Commands
 
-## `main()`
+## `main()` function
 
 In all of your BASH scripts, start using a `main()` function.
 

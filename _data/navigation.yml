@@ -47,7 +47,7 @@ styles:
       - title: "<code>IFS=$'\\n'</code>"
         url: '#ifsn'
       - title: '<code>find -print0</code>'
-        url: '#find-print0'
+        url: '#find--print0'
       - title: '<code>declare -A</code>'
         url: '#declare--a-1'
 
@@ -67,7 +67,7 @@ styles:
     url: '#-commands'
     children:
       - title: '<code>main()</code>'
-        url: '#main'
+        url: '#main-function'
       - title: '<code>$*</code> or <code>$@</code>'
         url: '#-or-'
       - title: '<code>${1:-default}</code>'
@@ -89,7 +89,7 @@ styles:
       - title: '<code>$(&lt;myFile.txt)</code>'
         url: '#myfiletxt'
       - title: '<code>$?</code>'
-        url: '#code'
+        url: '#-code'
       - title: '<code>STDOUT</code> & <code>STDERR</code>'
         url: '#stdout--stderr'
 
@@ -141,6 +141,6 @@ styles:
       - title: '<code>BASH 4</code> + <code>BASH 5</code>'
         url: '#bash-4--bash-5'
       - title: '<code>$variableName</code>'
-        url: '#variableName'
+        url: '#variablename'
       - title: '<code>Docker</code>'
         url: '#docker'
