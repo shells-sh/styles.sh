@@ -364,24 +364,54 @@ Just remember:
 | `%`  | Remove shortest match (from the right) | `${x%oo*}` ➤ `.foo .foo .f` |
 | `%%` | Remove longest match (from the right)  | `${x%%oo*}` ➤ `.f`          |
 
-> 💡 **Tip:** When using `#` and `%` you'll usually want to accompany it with `*` (see examples)
+> 💡 **Tip:** When using `#` and `%` you'll usually want to accompany it with `*`
 
 #### Substring Replacement
 
-|       | Description | e.g. |
-| ----- | ----------- | ---- |
-| `/`   |             |
-| `//`  |             |
-| `/#`  |             |
-| `//#` |             |
-| `/%`  |             |
-| `//%` |             |
-| `:`   |             |
-| `: :` |             |
+|       | Description                                             | e.g. `.foo .foo .foo`              |
+| ----- | ------------------------------------------------------- | ---------------------------------- |
+| `/`   | Replace first match                                     | `${x/foo/bar}` ➤ `.bar .foo .fooo` |
+| `//`  | Replace all matches                                     | `${x//foo/bar}` ➤ `.bar .bar .bar` |
+| `/#`  | Replace match if at start of string                     | `${x/#foo/bar}` ➤ `.foo .foo .foo` |
+| `/%`  | Replace match if at end of string                       | `${x/%foo/bar}` ➤ `.foo .foo .bar` |
+| `:`   | Substring to right of provided index                    | `${x:3}` ➤ `o .foo .foo`           |
+| `: :` | Substring to right of provided index of provided length | `${x:3:5}` ➤ `o .fo`               |
 
 > 💡 **Related:** To get the length of a string: `${#varname}`
 
 ### `shopt -s extglob`
+
+Sometimes you need some more modern expressions in your replacements.
+
+[Here](https://www.linuxjournal.com/content/bash-extended-globbing) is a good reference of what `extglob` provides:
+
+> |                  | Description from the bash man page                     |
+> | ---------------- | ------------------------------------------------------ |
+> | ?(pattern-list)  | Matches zero or one occurrence of the given patterns   |
+> | \*(pattern-list) | Matches zero or more occurrences of the given patterns |
+> | +(pattern-list)  | Matches one or more occurrences of the given patterns  |
+> | @(pattern-list)  | Matches one of the given patterns                      |
+> | !(pattern-list)  | Matches anything except one of the given patterns      |
+
+The most common need for `extglob` is to match a series of repeating characters
+
+- e.g. `+([\d])` for multiple digits
+
+You have to enable `extglob` to use the extended pattern matching: `shopt -s extglob`
+
+> 💡 **Tip:** If you want to be _kind_ and disable `extglob` after using it (_unless it was already enabled_):
+>
+> ```sh
+> # Check if extglob is enabled
+> if shopt -q extglob
+> then
+>   # it was already enabled, go ahead and do your pattern matches
+> else
+>   shopt -s extglob # turn it on
+>   # go ahead and do your pattern matches
+>   shopt -u extglob # turn it back off
+> fi
+> ```
 
 <br>
 
