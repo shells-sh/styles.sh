@@ -1729,14 +1729,11 @@ echo "$hello"
 Bash 3.2.57 required `eval` to work with variables with dynamic names.
 
 ```sh
-hello="World"
+hello="Hello, world!"
 
-# Modify the value of hello using a variable which contains the variable name "hello"
 variableName=hello
-declare "$variableName=\"change me\""
-
-eval "echo \"$hello\""
-# => "change me"
+eval "echo \"$variableName\""
+# => "Hello, world!"
 ```
 
 ## `Docker`
