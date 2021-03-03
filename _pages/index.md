@@ -1713,7 +1713,7 @@ Run a Bash script in the local folder by mounting the folder and running it in a
 
 ```sh
 # [foo.sh]
-echo "hi from $Bash_VERSION"
+echo "hi from $BASH_VERSION"
 ```
 
 ```sh
