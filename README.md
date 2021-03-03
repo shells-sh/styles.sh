@@ -1,7 +1,5 @@
 # 🖌️ BASH Style Guide
 
-{% raw %}
-
 - Some programming styles are **personal preferences**.
 - Some programming styles are **company guidelines**.
 - Some programming styles are **community conventions**.
@@ -1772,4 +1770,3 @@ $ docker run --rm -it -v "$PWD:/scripts" bash3257 bash scripts/foo.sh
 # hi from 3.2.57(1)-release
 ```
 
-{% endraw %}
