@@ -1681,9 +1681,9 @@ hello="World"
 
 # Modify the value of hello using a variable which contains the variable name "hello"
 variableName=hello
-eval "$variableName=\"change me\""
+declare "$variableName=\"change me\""
 
-echo "$hello"
+eval "echo \"$hello\""
 # => "change me"
 ```
 
