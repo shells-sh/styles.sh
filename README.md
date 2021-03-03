@@ -1559,13 +1559,94 @@ Feel free to play with this pattern for your own DSLs!
 
 ## `it.needs_tests()`
 
+Your code needs tests.
+
+That is it.
+
+No excuses.
+
+If you're writing a library or framework, take a look at the available testing frameworks for Bash and shell scripts. Pick one, learn it well, and write a robust test suite.
+
 <br>
 
 # 📖 Documentation
 
+Your code needs documentation.
+
+That is it.
+
+No excuses.
+
+> ℹ️ **Note:** I haven't found any existing tools that I like for generating documentation.
+
 ## `## # My Function`
 
+**Recommendation:** Document your functions and doce with Markdown (_and extract it into a website_)
+
+I write my functions like this:
+
+#### Example (_Markdown commented function_)
+
+````sh
+## # `myFunction`
+##
+## It does something
+##
+## #### Example
+##
+## ```sh
+## myFunction cool things
+## ```
+##
+## | | Parameter |
+## |-|-----------|
+## | `$1` | Description of the first parameter |
+## | `$2` | Description of the second parameter |
+## | `$@` | Description of splat of additional arguments |
+##
+## - Returns `1` if the function something doesn't not exist |
+##
+myFunction() {
+  :
+}
+````
+
+I copy/paste the template between my functions.
+
+It's worth it.
+
+Then I `grep` for ALL `##` comments across my files and put them into one or more Markdown files.
+
+> 💡 **Tip:** Host your Markdown files with something like GitHub Pages!
+
 ## `>> "$apiDocs.md"`
+
+Let's say that my project tree has a `src/` folder with 10 subfolders.
+
+If I want to create 1 markdown file for each of those 10 sections of the codebase:
+
+#### Example (_generate Markdown files from comments_)
+
+```sh
+generateDocs() {
+  local dir
+  for dir in src/*
+  do
+    local folderName="${dir%%*/}"
+    grep -rl "^[[:space:]]*##" "$dir"   | \
+    sort --version-sort                 | \
+    xargs -n1 grep -h "^[[:space:]]*##" | \
+    sed 's/^[[:space:]]*//'             | \
+    sed 's/^##[[:space:]]\?//' >> docs/$folderName.md
+  done
+}
+
+generateDocs
+```
+
+You'll end up with `docs/dogs.md` and `docs/cats.md` etc 📚
+
+Add other scripts to add headers / footers etc to make your docs your own 💕
 
 <br>
 
