@@ -215,7 +215,8 @@ Do not simply check if the variable is empty (_unless that's what you are indend
 > - Check for blank when that's when you intend (`-z` `-n`)
 > - Check for variable exists when that's what you intend (`"${var+x}"`)
 
-ℹ️ For more information on `[ -n "${var+x}" ]` [here is a StackOverflow post](https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash) explaining it.  
+ℹ️ For more info on `[ -n "${var+x}" ]` [here's a StackOverflow post](https://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash) explaining it.
+
 _Note: I have run into problems using this without the `"` double quotes so I highly recommend using them!_
 
 <br>
