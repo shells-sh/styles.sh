@@ -368,14 +368,14 @@ Just remember:
 
 #### Substring Replacement
 
-|       | Description                                             | e.g. `.foo .foo .foo`              |
-| ----- | ------------------------------------------------------- | ---------------------------------- |
-| `/`   | Replace first match                                     | `${x/foo/bar}` ➤ `.bar .foo .fooo` |
-| `//`  | Replace all matches                                     | `${x//foo/bar}` ➤ `.bar .bar .bar` |
-| `/#`  | Replace match if at start of string                     | `${x/#foo/bar}` ➤ `.foo .foo .foo` |
-| `/%`  | Replace match if at end of string                       | `${x/%foo/bar}` ➤ `.foo .foo .bar` |
-| `:`   | Substring to right of provided index                    | `${x:3}` ➤ `o .foo .foo`           |
-| `: :` | Substring to right of provided index of provided length | `${x:3:5}` ➤ `o .fo`               |
+|      | Description                                             | e.g. `.foo .foo .foo`              |
+| ---- | ------------------------------------------------------- | ---------------------------------- |
+| `/`  | Replace first match                                     | `${x/foo/bar}` ➤ `.bar .foo .fooo` |
+| `//` | Replace all matches                                     | `${x//foo/bar}` ➤ `.bar .bar .bar` |
+| `/#` | Replace match if at start of string                     | `${x/#foo/bar}` ➤ `.foo .foo .foo` |
+| `/%` | Replace match if at end of string                       | `${x/%foo/bar}` ➤ `.foo .foo .bar` |
+| `:`  | Substring to right of provided index                    | `${x:3}` ➤ `o .foo .foo`           |
+| `::` | Substring to right of provided index of provided length | `${x:3:5}` ➤ `o .fo`               |
 
 > 💡 **Related:** To get the length of a string: `${#varname}`
 
