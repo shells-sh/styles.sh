@@ -1153,6 +1153,8 @@ When coding against Bash `3.2.57`, you're "stuck" with single dimensional Bash a
 
 This section covers just the basics of some of my favorite patterns for storing complex data in Bash arrays.
 
+> 💕 I love representing objects in various ways in Bash arrays
+
 ## `name:1;age:2;`
 
 > Index lookup fields.
