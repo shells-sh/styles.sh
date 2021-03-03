@@ -70,10 +70,12 @@ styles:
         url: '#-or-'
       - title: '<code>${1:-default}</code>'
         url: '#1-default'
-      - title: '<code>[ while "$#" -gt 0 ]</code>'
+      - title: '<code>[ while $# -gt 0 ]</code>'
         url: '#-while---gt-0-'
       - title: '<code>case ... esac</code>'
         url: '#case--esac'
+      - title: '<code>getopts</code>'
+        url: '#getopts'
       - title: '<code>- <<< "Foo"</code>'
         url: '#---foo'
 

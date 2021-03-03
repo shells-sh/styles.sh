@@ -39,6 +39,9 @@ This helps to **avoid global naming collisions** with variables in other librari
 
 ## `_myApp_privateVar`
 
+_This recommendation is for **library code**._  
+_Scripts and programs do not generally need to prefix variables._
+
 > ℹ️ All private variables should be `local` variables inside functions ([see more](#local))
 
 Name local and non-public variables in `camelCase` (_note:_ `snake_case` _is more popular_)
@@ -50,6 +53,8 @@ This helps to **avoid global naming collisions** with variables in other librari
 > 💡 Reminder: variables you assign will be available to the scope of other functions that you call.
 >
 > This includes `local` variables.
+
+☝️ **Note:** Most of the examples in this style guide _do **not**_ follow this recommendation (_for ease of reading_).
 
 #### Example
 
@@ -596,6 +601,8 @@ C# is an example of a language which supports `out` variables. The method can mo
 
 We can reproduce the same using Bash:
 
+#### Example (Bash `out`-style variables)
+
 ```sh
 main() {
   local name
@@ -646,6 +653,8 @@ You can use the same pattern to return:
 - Populate a provided array
 
 Here is a sample that demonstrates both:
+
+#### Example (_multiple `out` return values_)
 
 ```sh
 # Sample data
@@ -790,7 +799,7 @@ Programmers of other languages might want to think of this as `||=` or "or equal
 
 If you want to set a parameter to a value only if it's not already set:
 
-#### Example
+#### Example (_parameter substitution_)
 
 ```sh
 FOO=123
@@ -806,6 +815,8 @@ echo "Bar: $BAR"
 ```
 
 Personally, I find this to be more readable:
+
+#### Example (_check if variable is empty_)
 
 ```sh
 FOO=123
@@ -831,11 +842,170 @@ echo "Bar: $BAR"
 >
 > The two are **not equivalent**.
 
-## `[ while "$#" -gt 0 ]`
+## `[ while $# -gt 0 ]`
+
+If you simply need to loop through arguments provided. in order:
+
+#### Example (_`for` loop thru arguments_)
+
+```sh
+main() {
+  local arg
+  for arg in "$@"
+  do
+    echo "The argument is: $arg"
+  done
+}
+```
+
+If you want to process arguments with complex syntax, it's usually nice to:
+
+#### Example (_`while` thru arguments_)
+
+```sh
+main() {
+  while [ $# -gt 0 ]
+  do
+    # ... look at "$1" and shift through arguments as necessary
+    shift
+  done
+}
+```
+
+#### Example (_`while` thru arguments with case/esac_)
+
+```sh
+# Very simple argument parsing, e.g. --fileName FILE --path PATH
+main() {
+  local fileName
+  local filePath
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      --fileName)
+        shift
+        fileName="$1"
+        ;;
+      --path)
+        shift
+        filePath="$1"
+        ;;
+      *)
+        echo "Unexpected argument: $1" >&2
+        return 1
+        ;;
+    esac
+    shift
+  done
+}
+```
 
 ## `case ... esac`
 
+Speaking of `case` / `esac`, it's really simple and powerful for structuring your commands _and subcommands_ (_and their subcommands..._).
+
+Most of my functions are structured in the following way:
+
+#### Example (_`case`/`esac` for subcommands_)
+
+```sh
+myFunction() {
+  local command="$1"; shift
+  case "$command" in
+    --help)
+      cat docs/HELP.md
+      ;;
+    config)
+      local configCommand="$1"; shift
+      case "$configCommand" in
+        list)
+          ls configFiles/*.txt
+          ;;
+        set)
+          echo "$1" > "configFiles/$1.txt"
+          echo "Saved configuration $1"
+          ;;
+        *)
+          echo "Unknown 'myFunction config' command: $2" >&2
+          return 1
+          ;;
+      esac
+      ;;
+    *)
+      echo "Unknown 'myFunction' command: $1" >&2
+      return 1
+      ;;
+  esac
+}
+```
+
+> 💡 **Tip:** You can store each "case" in a separate shell source file and use a script to merge them all into one `case`/`esac` tree.
+
+## `getopts`
+
+Nada.
+
+I haven't used it yet.
+
+It's a classic! Go ahead and try it out!
+
+Most of my argument parsing is not classic `-a foo --list` arguments.
+
 ## `- <<< "Foo"`
+
+Finally, don't forget `STDIN`!
+
+If you want to accept standard input, the convention is to read from standard input when a `-` argument is provided.
+
+#### Example (_read from `STDIN` when `-` argument_)
+
+```sh
+# Print a value passed as an argument
+# (if the '-' argument is provided, read from STDIN instead)
+printProvidedValue() {
+  if [ "$1" = - ]
+  then
+    echo "The value from STDIN is: $(</dev/stdin)"
+  else
+    echo "The value from argument is $1"
+  fi
+}
+
+printProvidedValue "Hello, world"
+# => "The value from argument is Hello, world"
+
+printProvidedValue - <<< "Goodnight, moon"
+# => "The value from STDIN is: Goodnight, moon"
+
+echo "Hello, goodbye" | printProvidedValue -
+# => "The value from STDIN is: Hello, goodbye"
+```
+
+You _can_ check if `STDIN` is present and use that when present, but NOT recommended. This is _slow_ and works by reading with a short timeout if `STDIN` is not present:
+
+#### Example (_read from `STDIN` when present_)
+
+```sh
+# If data is present in STDIN, print that
+# otherwise print the provided argument
+printProvidedValue() {
+  if read -t 0 -N 0
+  then
+    echo "The value from STDIN is: $(</dev/stdin)"
+  else
+    echo "The value from argument is $1"
+  fi
+}
+
+printProvidedValue "Hello, world"
+# => "The value from argument is Hello, world"
+
+printProvidedValue - <<< "Goodnight, moon"
+# => "The value from STDIN is: Goodnight, moon"
+
+echo "Hello, goodbye" | printProvidedValue -
+# => "The value from STDIN is: Hello, goodbye"
+```
 
 <br>
 
