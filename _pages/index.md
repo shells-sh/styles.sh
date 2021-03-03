@@ -6,6 +6,8 @@ sidebar:
   nav: 'styles'
 ---
 
+{% raw %}
+
 - Some programming styles are **personal preferences**.
 - Some programming styles are **company guidelines**.
 - Some programming styles are **community conventions**.
@@ -241,6 +243,12 @@ dogs "setName" Rover
 "dogs" "setName" "Rover"
 # ^ These are all technically equivalent
 ```
+
+> If you have a _real_ _actual_ reason for serious performance in a library:
+>
+> - use `no quotes` when possible
+> - else `'single quotes'` to avoid variable interpolation
+> - use `"double quotes"` only when interpolation is required
 
 ## `grep` & `sed` & `awk`
 
@@ -1329,6 +1337,93 @@ main
 
 ## `cmd { ... }`
 
+Sometimes your commands will need to store commands to _run later_.
+
+When storing commands, you MUST store them as arrays of arguments (_like_ `$@`)
+
+#### ❌ Don't Do This
+
+```sh
+commandToRunLater="ls \"some/dir\" -l"
+```
+
+#### ✅ Do This
+
+```sh
+commandToRunLater=("ls" "some/dir" "-l")
+```
+
+But usually users will want to provide these commands to you in an elegant way.
+
+#### `{ local command }` and `{{ subshell }}`
+
+**My favorite convention** is:
+
+- Allow users to provide commands using the syntax: `{ cmd *args }`
+- `{{ cmd *args }}` double curly braces implies the command should be run in a subshell
+
+It's pretty easy to support!
+
+```sh
+# $1 - A name identifier for this command to run later
+# $@ - { ... } arguments
+saveCommandForLater() {
+  local commandName="$1"; shift
+  local runInSubshell
+  if [ "$1" = "{" ] || [ "$1" = "{{" ] # block representing a command!
+  then
+    [ "$1" = "{{" ] && runInSubshell=true
+    eval "COMMAND_$commandName=(\"$runInSubshell\")"
+    shift
+    while [ $# -gt 0 ]
+    do
+      [ "$1" = "}" ] || [ "$1" = "}}" ] && return 0
+      eval "COMMAND_$commandName+=(\"\$1\")"
+      shift
+    done
+  else
+    echo "Expected saveCommandForLater with a { ... } block" >&2
+    return 1
+  fi
+  echo "Missing } or }} closing braces for saveCommandForLater command" >&2
+  return 1
+}
+
+# $1 - A name identifier for this command to run later
+runCommandFromEarlier() {
+  local runInSubshell
+  eval "runInSubshell=\"\${COMMAND_$1[0]}\""
+  if [ -n "$runInSubshell" ]
+  then
+    local _
+    eval "_=\$( \"\${COMMAND_$1[@]:1}\" )"
+  else
+    eval "\${COMMAND_$1[@]:1}"
+  fi
+}
+```
+
+And give it a try:
+
+```sh
+saveCommandForLater hello { echo "Hello, world!" }
+runCommandFromEarlier hello
+# => "Hello, world!"
+
+# Now confirm that {{ ... }} runs in a subshell and can't modify variables
+x=42
+saveCommandForLater subshellSetVariable {{ eval "x=5" }}
+saveCommandForLater localSetVariable { eval "x=5" }
+
+runCommandFromEarlier subshellSetVariable
+echo "$x"
+# => 42
+
+runCommandFromEarlier localSetVariable
+echo "$x"
+# => 5
+```
+
 ## `do ... end`
 
 <br>
@@ -1468,3 +1563,5 @@ echo "hi from $Bash_VERSION"
 $ docker run --rm -it -v "$PWD:/scripts" bash3257 bash scripts/foo.sh
 # hi from 3.2.57(1)-release
 ```
+
+{% endraw %}
