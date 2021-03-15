@@ -9,3 +9,4 @@
 - [ ] `BASH_REMATCH`
 - [ ] `BASH_SOURCE`
 - [ ] `BASH_LINENO` and `FUNCNAME`
+- [ ] `for (( i=0; i<${#foo}; i++ )); do`
