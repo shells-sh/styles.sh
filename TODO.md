@@ -1,0 +1,5 @@
+- [ ] `printf --`
+- [ ] `declare -i`
+- [ ] `declare -p[x]`
+- [ ] `local IFS`
+- [ ] `[ -p /dev/stdin ]`
