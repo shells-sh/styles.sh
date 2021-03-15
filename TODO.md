@@ -3,3 +3,4 @@
 - [ ] `declare -p[x]`
 - [ ] `local IFS`
 - [ ] `[ -p /dev/stdin ]`
+- [ ] `for local x`
