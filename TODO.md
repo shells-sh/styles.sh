@@ -4,3 +4,5 @@
 - [ ] `local IFS`
 - [ ] `[ -p /dev/stdin ]`
 - [ ] `for local x`
+- [ ] `shopt -s expand_aliases`
+- [ ] `shopt` review
