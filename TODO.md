@@ -11,3 +11,4 @@
 - [ ] `BASH_LINENO` and `FUNCNAME`
 - [ ] `for (( i=0; i<${#foo}; i++ )); do`
 - [ ] `cat -A` and friends
+- [ ] Fix `find -print0` example, it needs `-rd ''` and no `IFS`
