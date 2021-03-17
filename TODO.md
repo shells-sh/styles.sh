@@ -12,3 +12,7 @@
 - [ ] `for (( i=0; i<${#foo}; i++ )); do`
 - [ ] `cat -A` and friends
 - [ ] Fix `find -print0` example, it needs `-rd ''` and no `IFS`
+- [ ] Note `awk` `sed` faster than BASH's built-in manipulation
+- [ ] Note how the guide is BASH 3.2.57 focused at top
+- [ ] Note how the guide's like core idea throughout is using 'just BASH', what's the word?
+- [ ] Note the variable scope issues with functions, like real hard
