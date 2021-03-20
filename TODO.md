@@ -17,3 +17,4 @@
 - [ ] Note how the guide's like core idea throughout is using 'just BASH', what's the word?
 - [ ] Note the variable scope issues with functions, like real hard
 - [ ] Update recommendation on `${:-}`
+- [ ] `tail -f` `echo >> log.log`
