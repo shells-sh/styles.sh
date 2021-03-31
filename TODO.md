@@ -2,7 +2,7 @@
 - [ ] `declare -i`
 - [ ] `declare -p[x]`
 - [ ] `local IFS`
-- [ ] `[ -p /dev/stdin ]`
+- [ ] `[ -p /dev/stdin ] || [ ! -t 0 ]` 
 - [ ] `for local x`
 - [ ] `shopt -s expand_aliases`
 - [ ] `shopt` review
