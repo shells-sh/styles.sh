@@ -19,3 +19,4 @@
 - [ ] Update recommendation on `${:-}`
 - [ ] `tail -f` `echo >> log.log`
 - [ ] Talk about errors incl stacktraces but also simple `[ $# -eq 0 ] && { echo >&2; return 1; }` pattern
+- [ ] `set --`
