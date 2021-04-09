@@ -1,4 +1,5 @@
 - [ ] `printf --`
+- [ ] `printf '%q'`
 - [ ] `declare -i`
 - [ ] `declare -p[x]`
 - [ ] `local IFS`
