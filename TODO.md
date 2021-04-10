@@ -23,3 +23,4 @@
 - [ ] `set --`
 - [ ] `(( i++ ))` and `set -e` or anything where the value of the expression is zero
 - [ ] `-z` `-n` style booleans
+- [ ] `find {} +`
