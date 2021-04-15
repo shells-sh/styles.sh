@@ -27,3 +27,4 @@
 - [ ] `xargs -0` with `find -print0`
 - [ ] Process Substitution (_and immitating two or more STDIN_)
 - [ ] `$'\n'`
+- [ ] `IFS=$'\n' lines=($(cat file))`
